@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Link } from "@nextui-org/link";
 import { Snippet } from "@nextui-org/snippet";
@@ -29,7 +29,8 @@ const inter = Inter({
 export default function Home() {
   const router = useRouter();
 
-  const signup = async () => {
+  const signup = async (e: { propertyName: string }) => {
+    if (e.propertyName === "opacity") return;
     router.push("/signup");
   };
 
@@ -47,7 +48,7 @@ export default function Home() {
             <Button
               variant="bordered"
               className="text-white border-white"
-              onPressEnd={signup}
+              onTransitionEnd={signup}
             >
               Зарегистрироваться
             </Button>
