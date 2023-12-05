@@ -46,7 +46,7 @@ export default function RootLayout({
             style={{ backgroundImage: "url('/images/bg.png')" }}
           >
             <NextLink
-              className="flex justify-start items-center gap-1 m-5	"
+              className="flex gap-1 m-5	"
               href="/"
             >
               <Logo />
@@ -55,14 +55,6 @@ export default function RootLayout({
             <main className="container mx-auto h-screen flex justify-center items-center">
               {children}
             </main>
-            <footer className="w-full flex items-center justify-center py-3">
-              <Link
-                isExternal
-                className="flex items-center gap-1 text-current"
-                href="https://nextui-docs-v2.vercel.app?utm_source=next-app-template"
-                title="nextui.org homepage"
-              ></Link>
-            </footer>
           </div>
         </Providers>
       </body>
