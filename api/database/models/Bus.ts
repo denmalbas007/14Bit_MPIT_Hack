@@ -23,9 +23,9 @@ import type { Shift } from './Shift'
 type BusAssociations = 'shifts'
 
 export class Bus extends Model<
-  InferAttributes<Bus, {omit: BusAssociations}>,
-  InferCreationAttributes<Bus, {omit: BusAssociations}>
-> {
+    InferAttributes<Bus, {omit: BusAssociations}>,
+    InferCreationAttributes<Bus, {omit: BusAssociations}>
+    > {
   declare id: CreationOptional<number>
   declare plateNumber: string | null
   declare modelName: string | null
@@ -33,6 +33,8 @@ export class Bus extends Model<
   declare latitude: number | null
   declare longitude: number | null
   declare levelOfCharge: number | null
+  declare capacity: number | null
+  declare passengerCount: number | null
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
@@ -48,7 +50,7 @@ export class Bus extends Model<
   declare hasShift: HasManyHasAssociationMixin<Shift, number>
   declare hasShifts: HasManyHasAssociationsMixin<Shift, number>
   declare countShifts: HasManyCountAssociationsMixin
-  
+
   declare static associations: {
     shifts: Association<Bus, Shift>
   }
@@ -79,6 +81,12 @@ export class Bus extends Model<
       levelOfCharge: {
         type: DataTypes.DOUBLE
       },
+      capacity: {
+        type: DataTypes.BIGINT
+      },
+      passengerCount: {
+        type: DataTypes.BIGINT
+      },
       createdAt: {
         type: DataTypes.DATE
       },
@@ -88,7 +96,7 @@ export class Bus extends Model<
     }, {
       sequelize
     })
-    
+
     return Bus
   }
 }

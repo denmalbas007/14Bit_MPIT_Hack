@@ -1,5 +1,7 @@
 import {PassengerSim} from "./PassengerSim";
 import {StationSim} from "./StationSim";
+import {Bus} from "../../database/models";
+
 export class BusSim {
     orientation = 0
     has_started = "waiting"
@@ -8,6 +10,7 @@ export class BusSim {
     timeBetweenStops = 100
     timeForStop = 15
     stopTimeElapsed = 0
+    stopActiveId = -1
     path_step = 0
     path_station = 0
     passengers: Array<PassengerSim>
@@ -16,6 +19,7 @@ export class BusSim {
     busId = 0
     latitude = 0
     longitude = 0
+
     constructor({busId, orientation, stations}) {
         this.busId = busId;
         this.orientation = orientation
@@ -39,6 +43,12 @@ export class BusSim {
             this.path_step = this.timeBetweenStops
 
             this.stopTimeElapsed += 1
+
+            if (this.orientation) {
+                this.stopActiveId = this.stations[this.path_station + 1].stationId
+            } else {
+                this.stopActiveId = this.stations[this.path_station - 1].stationId
+            }
             if (this.stopTimeElapsed < this.timeForStop) return;
 
             this.stopTimeElapsed = 0
@@ -81,5 +91,15 @@ export class BusSim {
         }
 
     }
-
+    async database_update() {
+        const busObject = await Bus.findOne({
+            where: {
+                id: this.busId
+            }
+        })
+        busObject.latitude = this.latitude;
+        busObject.longitude = this.longitude;
+        busObject.passengerCount = this.passengers.length;
+        await busObject.save()
+    }
 }

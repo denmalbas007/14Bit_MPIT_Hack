@@ -2,7 +2,7 @@
 
 
 async function start_simulation() {
-
+    
     setInterval(async ()=>{},1000);
 }
 
