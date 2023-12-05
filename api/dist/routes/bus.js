@@ -15,10 +15,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const bus_1 = __importDefault(require("../services/bus"));
 const router = express_1.default.Router();
+router.post('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const options = {
+        plateNumber: req.body['plateNumber'],
+        modelName: req.body['modelName'],
+        serialNumber: req.body['serialNumber']
+    };
+    try {
+        const result = yield bus_1.default.postBus(options);
+        res.status(200).send(result.data);
+    }
+    catch (err) {
+        return res.status(500).send({
+            status: 500,
+            error: 'Server Error'
+        });
+    }
+}));
 router.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const options = {};
     try {
-        const result = yield bus_1.default.getBus(options);
+        const result = yield bus_1.default.getBuses(options);
         res.status(200).send(result.data);
     }
     catch (err) {
@@ -35,6 +52,25 @@ router.get('/:busId', (req, res, next) => __awaiter(void 0, void 0, void 0, func
     try {
         const result = yield bus_1.default.getBusByBusId(options);
         res.status(200).send(result.data);
+    }
+    catch (err) {
+        return res.status(500).send({
+            status: 500,
+            error: 'Server Error'
+        });
+    }
+}));
+router.put('/:busId/location', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const options = {
+        busId: req.body['busId'],
+        latitude: req.body['latitude'],
+        longitude: req.body['longitude']
+    };
+    try {
+        const result = yield bus_1.default.putLocation(options);
+        res.status(200).send({
+            status: 200,
+        });
     }
     catch (err) {
         return res.status(500).send({

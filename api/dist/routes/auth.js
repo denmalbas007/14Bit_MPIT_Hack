@@ -17,8 +17,8 @@ const auth_1 = __importDefault(require("../services/auth"));
 const router = express_1.default.Router();
 router.post('/signin', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const options = {
-        email: req.query['email'],
-        password: req.query['password']
+        email: req.body['email'],
+        password: req.body['password']
     };
     try {
         const result = yield auth_1.default.postAuthSignIn(options);
@@ -33,10 +33,10 @@ router.post('/signin', (req, res, next) => __awaiter(void 0, void 0, void 0, fun
 }));
 router.post('/signup', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const options = {
-        firstName: req.query['firstName'],
-        lastName: req.query['lastName'],
-        email: req.query['email'],
-        password: req.query['password'],
+        firstName: req.body['firstName'],
+        lastName: req.body['lastName'],
+        email: req.body['email'],
+        password: req.body['password'],
     };
     try {
         const result = yield auth_1.default.postAuthSignup(options);

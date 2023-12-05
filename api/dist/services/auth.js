@@ -8,7 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const models_1 = require("../database/models");
+const auth_1 = __importDefault(require("../config/auth"));
+const crypto_1 = __importDefault(require("crypto"));
 /**
  * @param {Object} options
  * @param {String} options.email
@@ -16,13 +23,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @throws {Error}
  * @return {Promise}
  */
-const models_1 = require("../database/models");
 function postAuthSignIn(options) {
     return __awaiter(this, void 0, void 0, function* () {
-        return {
-            status: 200,
-            data: 'getBusByBusid ok!'
-        };
+        const user = yield models_1.User.findOne({
+            where: {
+                email: options.email
+            }
+        });
+        if (user === null) {
+            return {
+                status: 401
+            };
+        }
+        if (bcrypt_1.default.compareSync(options.password, user.passwordHash)) {
+            user.secureSessionId = crypto_1.default.randomBytes(auth_1.default.token_size).toString("hex");
+            yield user.save();
+            return {
+                status: 200,
+                data: {
+                    secureSessionId: user.secureSessionId
+                }
+            };
+        }
     });
 }
 /**
@@ -37,9 +59,27 @@ function postAuthSignIn(options) {
  */
 function postAuthSignup(options) {
     return __awaiter(this, void 0, void 0, function* () {
+        const [user, created] = yield models_1.User.findOrCreate({
+            where: {
+                email: options.email
+            }
+        });
+        if (!created) {
+            return {
+                status: 401,
+            };
+        }
+        user.passwordSalt = bcrypt_1.default.genSaltSync(auth_1.default.salt_rounds);
+        user.passwordHash = bcrypt_1.default.hashSync(options.password, user.passwordSalt);
+        Object.assign(user, {
+            firstName: options.firstName,
+            lastName: options.lastName,
+            userType: options.userType
+        });
+        yield user.save();
         return {
             status: 200,
-            data: 'getBusByBusid ok!'
+            data: {}
         };
     });
 }

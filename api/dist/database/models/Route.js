@@ -14,6 +14,9 @@ class Route extends sequelize_1.Model {
             name: {
                 type: sequelize_1.DataTypes.TEXT
             },
+            path: {
+                type: sequelize_1.DataTypes.JSON
+            },
             createdAt: {
                 type: sequelize_1.DataTypes.DATE
             },

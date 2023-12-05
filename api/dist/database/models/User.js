@@ -22,6 +22,18 @@ class User extends sequelize_1.Model {
             secureSessionId: {
                 type: sequelize_1.DataTypes.TEXT
             },
+            passwordHash: {
+                type: sequelize_1.DataTypes.TEXT
+            },
+            passwordSalt: {
+                type: sequelize_1.DataTypes.TEXT
+            },
+            firstName: {
+                type: sequelize_1.DataTypes.TEXT
+            },
+            userType: {
+                type: sequelize_1.DataTypes.TEXT
+            },
             createdAt: {
                 type: sequelize_1.DataTypes.DATE
             },

@@ -18,6 +18,7 @@ import {
   NonAttribute,
   Sequelize
 } from 'sequelize'
+import { Json } from '../types'
 import type { BusRouteStation } from './BusRouteStation'
 import type { RouteSchedule } from './RouteSchedule'
 import type { Shift } from './Shift'
@@ -25,11 +26,12 @@ import type { Shift } from './Shift'
 type RouteAssociations = 'shifts' | 'routeSchedules' | 'busRouteStations'
 
 export class Route extends Model<
-  InferAttributes<Route, {omit: RouteAssociations}>,
-  InferCreationAttributes<Route, {omit: RouteAssociations}>
-> {
+    InferAttributes<Route, {omit: RouteAssociations}>,
+    InferCreationAttributes<Route, {omit: RouteAssociations}>
+    > {
   declare id: CreationOptional<number>
   declare name: string | null
+  declare path: Json | null
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
@@ -45,7 +47,7 @@ export class Route extends Model<
   declare hasShift: HasManyHasAssociationMixin<Shift, number>
   declare hasShifts: HasManyHasAssociationsMixin<Shift, number>
   declare countShifts: HasManyCountAssociationsMixin
-  
+
   // Route hasMany RouteSchedule
   declare routeSchedules?: NonAttribute<RouteSchedule[]>
   declare getRouteSchedules: HasManyGetAssociationsMixin<RouteSchedule>
@@ -58,7 +60,7 @@ export class Route extends Model<
   declare hasRouteSchedule: HasManyHasAssociationMixin<RouteSchedule, number>
   declare hasRouteSchedules: HasManyHasAssociationsMixin<RouteSchedule, number>
   declare countRouteSchedules: HasManyCountAssociationsMixin
-  
+
   // Route hasMany BusRouteStation
   declare busRouteStations?: NonAttribute<BusRouteStation[]>
   declare getBusRouteStations: HasManyGetAssociationsMixin<BusRouteStation>
@@ -71,7 +73,7 @@ export class Route extends Model<
   declare hasBusRouteStation: HasManyHasAssociationMixin<BusRouteStation, number>
   declare hasBusRouteStations: HasManyHasAssociationsMixin<BusRouteStation, number>
   declare countBusRouteStations: HasManyCountAssociationsMixin
-  
+
   declare static associations: {
     shifts: Association<Route, Shift>,
     routeSchedules: Association<Route, RouteSchedule>,
@@ -89,6 +91,9 @@ export class Route extends Model<
       name: {
         type: DataTypes.TEXT
       },
+      path: {
+        type: DataTypes.JSON
+      },
       createdAt: {
         type: DataTypes.DATE
       },
@@ -98,7 +103,7 @@ export class Route extends Model<
     }, {
       sequelize
     })
-    
+
     return Route
   }
 }

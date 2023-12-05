@@ -11,10 +11,10 @@ class Shift extends sequelize_1.Model {
                 autoIncrement: true,
                 allowNull: false
             },
-            startAt: {
+            startsAt: {
                 type: sequelize_1.DataTypes.DATE
             },
-            endAt: {
+            endsAt: {
                 type: sequelize_1.DataTypes.DATE
             },
             driverId: {

@@ -54,10 +54,10 @@ async function getBusByBusId(options) {
   const shift = await Shift.findOne({
     where: {
       busId: options.busId,
-      startAt: {
+      startsAt: {
         [Op.lt]: nowDate
       },
-      endAt: {
+      endsAt: {
         [Op.gt]: nowDate
       }
     }
@@ -102,6 +102,7 @@ async function putLocation(options) {
   await bus.save()
   return bus
 }
+
 export default {
   getBuses,
   getBusByBusId,

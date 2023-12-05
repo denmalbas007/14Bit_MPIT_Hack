@@ -52,7 +52,7 @@ async function postAuthSignup(options) {
       email: options.email
     }
   })
-  if (created) {
+  if (!created) {
     return {
       status: 401,
     }

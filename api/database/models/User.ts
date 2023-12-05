@@ -25,16 +25,18 @@ import type { UserNotification } from './UserNotification'
 type UserAssociations = 'userNotifications' | 'shifts' | 'chatRoomParticipants'
 
 export class User extends Model<
-  InferAttributes<User, {omit: UserAssociations}>,
-  InferCreationAttributes<User, {omit: UserAssociations}>
-> {
+    InferAttributes<User, {omit: UserAssociations}>,
+    InferCreationAttributes<User, {omit: UserAssociations}>
+    > {
   declare id: CreationOptional<number>
   declare email: string | null
   declare lastName: string | null
   declare dateOfBirth: string | null
-  declare passwordSalt: string | null
-  declare passwordHash: string | null
   declare secureSessionId: string | null
+  declare passwordHash: string | null
+  declare passwordSalt: string | null
+  declare firstName: string | null
+  declare userType: string | null
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
@@ -50,33 +52,33 @@ export class User extends Model<
   declare hasUserNotification: HasManyHasAssociationMixin<UserNotification, number>
   declare hasUserNotifications: HasManyHasAssociationsMixin<UserNotification, number>
   declare countUserNotifications: HasManyCountAssociationsMixin
-  
+
   // User hasMany Shift
   declare shifts?: NonAttribute<Shift[]>
   declare getShifts: HasManyGetAssociationsMixin<Shift>
   declare setShifts: HasManySetAssociationsMixin<Shift, number>
   declare addShift: HasManyAddAssociationMixin<Shift, number>
   declare addShifts: HasManyAddAssociationsMixin<Shift, number>
-  declare createShift: HasManyCreateAssociationMixin<Shift>
+  declare createShift: HasManyCreateAssociationMixin<Shift, 'driverId'>
   declare removeShift: HasManyRemoveAssociationMixin<Shift, number>
   declare removeShifts: HasManyRemoveAssociationsMixin<Shift, number>
   declare hasShift: HasManyHasAssociationMixin<Shift, number>
   declare hasShifts: HasManyHasAssociationsMixin<Shift, number>
   declare countShifts: HasManyCountAssociationsMixin
-  
+
   // User hasMany ChatRoomParticipant
   declare chatRoomParticipants?: NonAttribute<ChatRoomParticipant[]>
   declare getChatRoomParticipants: HasManyGetAssociationsMixin<ChatRoomParticipant>
   declare setChatRoomParticipants: HasManySetAssociationsMixin<ChatRoomParticipant, number>
   declare addChatRoomParticipant: HasManyAddAssociationMixin<ChatRoomParticipant, number>
   declare addChatRoomParticipants: HasManyAddAssociationsMixin<ChatRoomParticipant, number>
-  declare createChatRoomParticipant: HasManyCreateAssociationMixin<ChatRoomParticipant>
+  declare createChatRoomParticipant: HasManyCreateAssociationMixin<ChatRoomParticipant, 'participantId'>
   declare removeChatRoomParticipant: HasManyRemoveAssociationMixin<ChatRoomParticipant, number>
   declare removeChatRoomParticipants: HasManyRemoveAssociationsMixin<ChatRoomParticipant, number>
   declare hasChatRoomParticipant: HasManyHasAssociationMixin<ChatRoomParticipant, number>
   declare hasChatRoomParticipants: HasManyHasAssociationsMixin<ChatRoomParticipant, number>
   declare countChatRoomParticipants: HasManyCountAssociationsMixin
-  
+
   declare static associations: {
     userNotifications: Association<User, UserNotification>,
     shifts: Association<User, Shift>,
@@ -99,13 +101,19 @@ export class User extends Model<
       dateOfBirth: {
         type: DataTypes.DATEONLY
       },
-      passwordSalt: {
+      secureSessionId: {
         type: DataTypes.TEXT
       },
       passwordHash: {
         type: DataTypes.TEXT
       },
-      secureSessionId: {
+      passwordSalt: {
+        type: DataTypes.TEXT
+      },
+      firstName: {
+        type: DataTypes.TEXT
+      },
+      userType: {
         type: DataTypes.TEXT
       },
       createdAt: {
@@ -117,7 +125,7 @@ export class User extends Model<
     }, {
       sequelize
     })
-    
+
     return User
   }
 }

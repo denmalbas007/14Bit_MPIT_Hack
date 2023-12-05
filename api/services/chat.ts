@@ -1,9 +1,26 @@
+import {ChatMessage, ChatMessageContent, ChatRoom, ChatRoomParticipant} from "../database/models";
+import {Op} from "sequelize";
+
+
+async function __getRoomByUserId(options) {
+  return await ChatRoom.findOne({
+
+    include: {
+      model: ChatRoomParticipant,
+      where: {
+        userId: {
+          [Op.in]: [options.fromUserId, options.toUserId]
+        }
+      }
+    }
+  })
+}
+
 /**
  * @param {Object} options
  * @throws {Error}
  * @return {Promise}
  */
-import {ChatRoom, ChatRoomParticipant} from "../database/models";
 
 async function getChats(options) {
 
@@ -18,40 +35,63 @@ async function getChats(options) {
 
 /**
  * @param {Object} options
- * @param {} options.userId
- @param {} options.callerUserId
+ * @param {} options.fromUserId
+ * @param {} options.toUserId
  * @param {} options.firstMessageAt
  * @throws {Error}
  * @return {Promise}
  */
 async function getChatByUserid(options) {
-  const chat = ChatRoom.findOne({
-
-    include: {
-      model: ChatRoomParticipant,
-      where: {
-
-      }
-    }
-  })
+  const room = await __getRoomByUserId(options)
+  const messages = await ChatMessage.findAll({
+    where: {
+      createdAt: {
+        [Op.lte]: options.firstMessageAt
+      },
+      roomId: room.id
+    },
+    order: ['createdAt','DESC'],
+    limit: 10,
+    include: ChatMessageContent
+  });
   return {
     status: 200,
-    data: 'getChatByUserid ok!'
+    data: {
+      room,
+      messages
+    }
   };
 }
 
 /**
  * @param {Object} options
- * @param {} options.userId 
- * @param {} options.content 
+ * @param {} options.userId
+ * @param {} options.fromUserId
+ * @param {} options.toUserId
+ * @param {Array} options.content
  * @throws {Error}
  * @return {Promise}
  */
 async function postChatByUserid(options) {
+  const room = await __getRoomByUserId(options);
+  const newMessage = await ChatMessage.create({
+    roomId: room.id,
+    senderId: options.fromUserId
+  });
 
+
+  for (const content of options.content) {
+    await ChatMessageContent.create({
+      messageId: newMessage.id,
+      contentType: content.type,
+      content: content.text
+    })
+  }
   return {
     status: 200,
-    data: 'postChatByUserid ok!'
+    data: {
+      newMessage
+    }
   };
 }
 

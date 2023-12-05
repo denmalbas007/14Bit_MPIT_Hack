@@ -3,6 +3,7 @@
  * @throws {Error}
  * @return {Promise}
  */
+
 async function getStatistics(options) {
   return {
     status: 200,

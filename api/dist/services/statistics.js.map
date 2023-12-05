@@ -1,1 +1,1 @@
-{"version":3,"file":"statistics.js","sourceRoot":"","sources":["../../services/statistics.ts"],"names":[],"mappings":";;;;;;;;;;;AAAA;;;;GAIG;AACH,SAAe,aAAa,CAAC,OAAO;;QAClC,OAAO;YACL,MAAM,EAAE,GAAG;YACX,IAAI,EAAE,mBAAmB;SAC1B,CAAC;IACJ,CAAC;CAAA;AAED,kBAAgB;IACd,aAAa;CACd,CAAA"}
+{"version":3,"file":"statistics.js","sourceRoot":"","sources":["../../services/statistics.ts"],"names":[],"mappings":";AAAA;;;;GAIG;;;;;;;;;;;AAEH,SAAe,aAAa,CAAC,OAAO;;QAClC,OAAO;YACL,MAAM,EAAE,GAAG;YACX,IAAI,EAAE,mBAAmB;SAC1B,CAAC;IACJ,CAAC;CAAA;AAED,kBAAgB;IACd,aAAa;CACd,CAAA"}

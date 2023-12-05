@@ -1,15 +1,22 @@
 
+import {BusRouteStation, Route, RouteSchedule, Shift} from "../database/models";
+
 /**
  * @param {Object} options
- * @param {} options.name 
+ * @param {} options.name
  * @throws {Error}
  * @return {Promise}
  */
-async function postRoute(options) {
 
+async function postRoute(options) {
+  const newRoute = await Route.create({
+    name: options.name,
+  })
   return {
     status: 200,
-    data: 'postRoute ok!'
+    data: {
+      newRoute
+    }
   };
 }
 
@@ -19,21 +26,68 @@ async function postRoute(options) {
  * @return {Promise}
  */
 async function getRoute(options) {
-
+  const routes = await Route.findAll();
 
   return {
     status: 200,
-    data: 'getRoute ok!'
+    data: {
+      routes
+    }
   };
 }
 
 /**
  * @param {Object} options
- * @param {Array} options.schedules 
+ * @param {Number} options.driverId
+ * @param {Number} options.routeId
+ * @param {Date} options.startsAt
+ * @param {Date} options.endsAt
  * @throws {Error}
  * @return {Promise}
  */
+
+async function postShift(options) {
+  const newShift = await Shift.create({
+    driverId: options.driverId,
+    routeId: options.routeId,
+    startsAt: options.startsAt,
+    endsAt: options.endsAt
+  });
+  return {
+    status: 200,
+    data: {
+      newShift
+    }
+  }
+}
+
+/**
+ * @param {Object} options
+ * @param {Number} options.routeId
+ * @param {Array} options.schedules
+ * @throws {Error}
+ * @return {Promise}
+ */
+
 async function putRouteByRouteIdSchedule(options) {
+  const route = await Route.findOne({
+    where: {
+      id: options.routeId
+    }
+  });
+  await RouteSchedule.destroy({
+    where:{
+      routeId: route.id
+    }
+  })
+  for (const schedule of options.schedules) {
+    await RouteSchedule.create({
+      routeId: route.id,
+      timeOfStart: schedule.timeOfStart,
+      timeOfEnd: schedule.timeOfEnd,
+      frequency: schedule.frequency
+    })
+  }
   return {
     status: 200,
     data: 'putRouteByRouteidSchedule ok!'
@@ -42,12 +96,28 @@ async function putRouteByRouteIdSchedule(options) {
 
 /**
  * @param {Object} options
- * @param {} options.busStationId 
+ * @param {} options.busStations
+ * @param {} options.routeId
  * @throws {Error}
  * @return {Promise}
  */
-async function postRouteByRouteIdBusStation(options) {
-
+async function putRouteByRouteIdBusStation(options) {
+  const route = await Route.findOne({
+    where:{
+      id: options.routeId
+    }
+  });
+  await BusRouteStation.destroy({
+    where:{
+      routeId: route.id,
+    }
+  })
+  for (const busStation of options.busStations) {
+    await BusRouteStation.create({
+      routeId: route.id,
+      busStationId: busStation.id
+    })
+  }
   return {
     status: 200,
     data: 'postRouteByRouteidBusStation ok!'
@@ -61,10 +131,24 @@ async function postRouteByRouteIdBusStation(options) {
  * @return {Promise}
  */
 async function getRouteByRouteId(options) {
-
+  const route = await Route.findOne({
+    where:{
+      id: options.routeId
+    },
+    include: [
+      {
+        model: RouteSchedule
+      },
+      {
+        model: BusRouteStation
+      }
+    ]
+  });
   return {
     status: 200,
-    data: 'getRouteByRouteid ok!'
+    data: {
+      route
+    }
   };
 }
 
@@ -72,6 +156,7 @@ export default {
   postRoute,
   getRoute,
   putRouteByRouteIdSchedule,
-  postRouteByRouteIdBusStation,
-  getRouteByRouteId
+  putRouteByRouteIdBusStation,
+  getRouteByRouteId,
+  postShift
 }

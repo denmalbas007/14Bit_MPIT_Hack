@@ -18,12 +18,12 @@ import type { User } from './User'
 type ShiftAssociations = 'user' | 'bus' | 'route'
 
 export class Shift extends Model<
-  InferAttributes<Shift, {omit: ShiftAssociations}>,
-  InferCreationAttributes<Shift, {omit: ShiftAssociations}>
-> {
+    InferAttributes<Shift, {omit: ShiftAssociations}>,
+    InferCreationAttributes<Shift, {omit: ShiftAssociations}>
+    > {
   declare id: CreationOptional<number>
-  declare startAt: Date | null
-  declare endAt: Date | null
+  declare startsAt: Date | null
+  declare endsAt: Date | null
   declare driverId: number | null
   declare busId: number | null
   declare routeId: number | null
@@ -35,19 +35,19 @@ export class Shift extends Model<
   declare getUser: BelongsToGetAssociationMixin<User>
   declare setUser: BelongsToSetAssociationMixin<User, number>
   declare createUser: BelongsToCreateAssociationMixin<User>
-  
+
   // Shift belongsTo Bus
   declare bus?: NonAttribute<Bus>
   declare getBus: BelongsToGetAssociationMixin<Bus>
   declare setBus: BelongsToSetAssociationMixin<Bus, number>
   declare createBus: BelongsToCreateAssociationMixin<Bus>
-  
+
   // Shift belongsTo Route
   declare route?: NonAttribute<Route>
   declare getRoute: BelongsToGetAssociationMixin<Route>
   declare setRoute: BelongsToSetAssociationMixin<Route, number>
   declare createRoute: BelongsToCreateAssociationMixin<Route>
-  
+
   declare static associations: {
     user: Association<Shift, User>,
     bus: Association<Shift, Bus>,
@@ -62,10 +62,10 @@ export class Shift extends Model<
         autoIncrement: true,
         allowNull: false
       },
-      startAt: {
+      startsAt: {
         type: DataTypes.DATE
       },
-      endAt: {
+      endsAt: {
         type: DataTypes.DATE
       },
       driverId: {
@@ -86,7 +86,7 @@ export class Shift extends Model<
     }, {
       sequelize
     })
-    
+
     return Shift
   }
 }

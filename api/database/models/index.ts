@@ -1,5 +1,5 @@
 import type { Sequelize, Model } from 'sequelize'
-import {Op} from "sequelize"
+import { Op } from 'sequelize'
 import { User } from './User'
 import { UserNotification } from './UserNotification'
 import { Bus } from './Bus'
@@ -49,11 +49,11 @@ export function initModels(sequelize: Sequelize) {
   })
   User.hasMany(Shift, {
     as: 'shifts',
-    foreignKey: 'user_id'
+    foreignKey: 'driver_id'
   })
   User.hasMany(ChatRoomParticipant, {
     as: 'chatRoomParticipants',
-    foreignKey: 'user_id'
+    foreignKey: 'participant_id'
   })
   UserNotification.belongsTo(User, {
     as: 'user',

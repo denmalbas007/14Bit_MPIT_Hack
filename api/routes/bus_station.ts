@@ -24,9 +24,9 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   const options = {
-    longitude: req.query['longitude'],
-    latitude: req.query['latitude'],
-    name: req.query['name']
+    longitude: req.body['longitude'],
+    latitude: req.body['latitude'],
+    name: req.body['name']
   };
 
   try {

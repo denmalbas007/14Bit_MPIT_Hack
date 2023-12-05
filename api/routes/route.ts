@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.post('/', async (req, res, next) => {
   const options = {
+    name: req.body['name']
   };
 
   try {
@@ -20,6 +21,24 @@ router.post('/', async (req, res, next) => {
   }
 });
 
+router.post('/:routeId/shift', async (req, res, next) => {
+  const options = {
+    driverId: req.body['driverId'],
+    startsAt: req.body['startsAt'],
+    endsAt: req.body['endsAt'],
+    routeId: req.params['routeId']
+  };
+
+  try {
+    const result = await route.postShift(options);
+    res.status(200).send(result.data);
+  } catch (err) {
+    return res.status(500).send({
+      status: 500,
+      error: 'Server Error'
+    });
+  }
+});
 
 router.get('/', async (req, res, next) => {
   const options = {
@@ -39,7 +58,8 @@ router.get('/', async (req, res, next) => {
 
 router.put('/:routeId/schedule', async (req, res, next) => {
   const options = {
-    schedules: req.query['schedules']
+    schedules: req.body['schedules'],
+    routeId: req.params['routeId']
   };
 
   try {
@@ -54,13 +74,14 @@ router.put('/:routeId/schedule', async (req, res, next) => {
 });
 
 
-router.post('/:routeId/bus_station', async (req, res, next) => {
+router.put('/:routeId/bus_station', async (req, res, next) => {
   const options = {
-    busStationId: req.query['busStationId']
+    busStationId: req.body['busStationId'],
+    routeId: req.params["routeId"]
   };
 
   try {
-    const result = await route.postRouteByRouteIdBusStation(options);
+    const result = await route.putRouteByRouteIdBusStation(options);
     res.status(200).send(result.data);
   } catch (err) {
     return res.status(500).send({

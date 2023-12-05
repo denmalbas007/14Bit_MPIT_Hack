@@ -41,7 +41,7 @@ router.get('/:userId', async (req, res, next) => {
 router.post('/:userId', async (req, res, next) => {
   const options = {
     userId: req.params['userId'],
-    content: req.query['content']
+    content: req.body['content']
   };
 
   try {

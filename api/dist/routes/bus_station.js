@@ -18,7 +18,7 @@ const router = express_1.default.Router();
 router.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const options = {};
     try {
-        const result = yield bus_station_1.default.getBusStation(options);
+        const result = yield bus_station_1.default.getBusStations(options);
         res.status(200).send(result.data);
     }
     catch (err) {
@@ -30,9 +30,9 @@ router.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
 }));
 router.post('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const options = {
-        longitude: req.query['longitude'],
-        latitude: req.query['latitude'],
-        name: req.query['name']
+        longitude: req.body['longitude'],
+        latitude: req.body['latitude'],
+        name: req.body['name']
     };
     try {
         const result = yield bus_station_1.default.postBusStation(options);

@@ -6,8 +6,8 @@ const router = express.Router();
 
 router.post('/signin', async (req, res, next) => {
   const options = {
-    email: req.query['email'],
-    password: req.query['password']
+    email: req.body['email'],
+    password: req.body['password']
   };
 
   try {
@@ -24,10 +24,10 @@ router.post('/signin', async (req, res, next) => {
 
 router.post('/signup', async (req, res, next) => {
   const options = {
-    firstName: req.query['firstName'],
-    lastName: req.query['lastName'],
-    email: req.query['email'],
-    password: req.query['password'],
+    firstName: req.body['firstName'],
+    lastName: req.body['lastName'],
+    email: req.body['email'],
+    password: req.body['password'],
   };
 
   try {

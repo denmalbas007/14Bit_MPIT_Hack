@@ -18,7 +18,7 @@ const router = express_1.default.Router();
 router.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const options = {};
     try {
-        const result = yield chat_1.default.getChat(options);
+        const result = yield chat_1.default.getChats(options);
         res.status(200).send(result.data);
     }
     catch (err) {
@@ -47,7 +47,7 @@ router.get('/:userId', (req, res, next) => __awaiter(void 0, void 0, void 0, fun
 router.post('/:userId', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const options = {
         userId: req.params['userId'],
-        content: req.query['content']
+        content: req.body['content']
     };
     try {
         const result = yield chat_1.default.postChatByUserid(options);

@@ -9,51 +9,80 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const models_1 = require("../database/models");
 /**
  * @param {Object} options
  * @throws {Error}
  * @return {Promise}
  */
-function getBusStation(options) {
+function getBusStations(options) {
     return __awaiter(this, void 0, void 0, function* () {
+        const busStations = yield models_1.BusStation.findAll();
         return {
             status: 200,
-            data: 'getBusStation ok!'
+            data: {
+                busStations
+            }
         };
     });
 }
 /**
  * @param {Object} options
- * @param {} options.longitude
- * @param {} options.latitude
  * @param {} options.name
  * @throws {Error}
  * @return {Promise}
  */
 function postBusStation(options) {
     return __awaiter(this, void 0, void 0, function* () {
+        const busStation = yield models_1.BusStation.create({
+            name: options.name
+        });
         return {
             status: 200,
-            data: 'postBusStation ok!'
+            data: {
+                busStation
+            }
         };
     });
 }
 /**
  * @param {Object} options
- * @param {Integer} options.busStationId
+ * @param {Number} options.busStationId
  * @throws {Error}
  * @return {Promise}
  */
 function getBusStationByBusStationId(options) {
     return __awaiter(this, void 0, void 0, function* () {
+        const busStation = yield models_1.BusStation.findOne({
+            where: {
+                id: options.busStationId
+            }
+        });
+        const busRouteStations = yield models_1.BusRouteStation.findAll({
+            where: {
+                busStationId: busStation.id
+            }
+        });
+        const routes = [];
+        for (const routeStation of busRouteStations) {
+            const route = yield models_1.Route.findOne({
+                where: {
+                    id: routeStation.routeId
+                }
+            });
+            routes.push(route);
+        }
         return {
             status: 200,
-            data: 'getBusStationByBusstationid ok!'
+            data: {
+                busStation,
+                routes
+            }
         };
     });
 }
 exports.default = {
-    getBusStation,
+    getBusStations,
     postBusStation,
     getBusStationByBusStationId
 };

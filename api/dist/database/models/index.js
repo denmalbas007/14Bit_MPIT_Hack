@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.initModels = exports.ChatMessageContent = exports.ChatMessage = exports.ChatRoomParticipant = exports.ChatRoom = exports.BusStation = exports.BusRouteStation = exports.RouteSchedule = exports.Route = exports.Shift = exports.Bus = exports.UserNotification = exports.User = void 0;
+exports.initModels = exports.Op = exports.ChatMessageContent = exports.ChatMessage = exports.ChatRoomParticipant = exports.ChatRoom = exports.BusStation = exports.BusRouteStation = exports.RouteSchedule = exports.Route = exports.Shift = exports.Bus = exports.UserNotification = exports.User = void 0;
+const sequelize_1 = require("sequelize");
+Object.defineProperty(exports, "Op", { enumerable: true, get: function () { return sequelize_1.Op; } });
 const User_1 = require("./User");
 Object.defineProperty(exports, "User", { enumerable: true, get: function () { return User_1.User; } });
 const UserNotification_1 = require("./UserNotification");
@@ -44,11 +46,11 @@ function initModels(sequelize) {
     });
     User_1.User.hasMany(Shift_1.Shift, {
         as: 'shifts',
-        foreignKey: 'user_id'
+        foreignKey: 'driver_id'
     });
     User_1.User.hasMany(ChatRoomParticipant_1.ChatRoomParticipant, {
         as: 'chatRoomParticipants',
-        foreignKey: 'user_id'
+        foreignKey: 'participant_id'
     });
     UserNotification_1.UserNotification.belongsTo(User_1.User, {
         as: 'user',

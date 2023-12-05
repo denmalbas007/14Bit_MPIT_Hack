@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const auth_1 = __importDefault(require("../services/auth"));
+const models_1 = require("../database/models");
 function useUserSessionMiddleware(request, response, next) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -23,6 +24,11 @@ function useUserSessionMiddleware(request, response, next) {
             const userCookie = JSON.parse((_a = request === null || request === void 0 ? void 0 : request.cookies) === null || _a === void 0 ? void 0 : _a.user);
             const successVerify = auth_1.default.verifySession(userCookie);
             if (successVerify) {
+                const user = yield models_1.User.findOne({
+                    where: {
+                        email: userCookie.email
+                    }
+                });
                 request.activeUser = {
                     email: userCookie === null || userCookie === void 0 ? void 0 : userCookie.email,
                     hasUser: true

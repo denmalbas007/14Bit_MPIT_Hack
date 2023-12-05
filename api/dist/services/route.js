@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const models_1 = require("../database/models");
 /**
  * @param {Object} options
  * @param {} options.name
@@ -17,9 +18,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 function postRoute(options) {
     return __awaiter(this, void 0, void 0, function* () {
+        const newRoute = yield models_1.Route.create({
+            name: options.name,
+        });
         return {
             status: 200,
-            data: 'postRoute ok!'
+            data: {
+                newRoute
+            }
         };
     });
 }
@@ -30,20 +36,67 @@ function postRoute(options) {
  */
 function getRoute(options) {
     return __awaiter(this, void 0, void 0, function* () {
+        const routes = yield models_1.Route.findAll();
         return {
             status: 200,
-            data: 'getRoute ok!'
+            data: {
+                routes
+            }
         };
     });
 }
 /**
  * @param {Object} options
+ * @param {Number} options.driverId
+ * @param {Number} options.routeId
+ * @param {Date} options.startsAt
+ * @param {Date} options.endsAt
+ * @throws {Error}
+ * @return {Promise}
+ */
+function postShift(options) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const newShift = yield models_1.Shift.create({
+            driverId: options.driverId,
+            routeId: options.routeId,
+            startsAt: options.startsAt,
+            endsAt: options.endsAt
+        });
+        return {
+            status: 200,
+            data: {
+                newShift
+            }
+        };
+    });
+}
+/**
+ * @param {Object} options
+ * @param {Number} options.routeId
  * @param {Array} options.schedules
  * @throws {Error}
  * @return {Promise}
  */
 function putRouteByRouteIdSchedule(options) {
     return __awaiter(this, void 0, void 0, function* () {
+        const route = yield models_1.Route.findOne({
+            where: {
+                id: options.routeId
+            }
+        });
+        yield models_1.RouteSchedule.destroy({
+            where: {
+                routeId: route.id
+            }
+        });
+        for (const schedule of options.schedules) {
+            yield models_1.RouteSchedule.create({
+                routeId: route.id,
+                timeOfStart: schedule.timeOfStart,
+                timeOfEnd: schedule.timeOfEnd,
+                frequency: schedule.frequency
+            });
+        }
         return {
             status: 200,
             data: 'putRouteByRouteidSchedule ok!'
@@ -52,12 +105,29 @@ function putRouteByRouteIdSchedule(options) {
 }
 /**
  * @param {Object} options
- * @param {} options.busStationId
+ * @param {} options.busStations
+ * @param {} options.routeId
  * @throws {Error}
  * @return {Promise}
  */
-function postRouteByRouteIdBusStation(options) {
+function putRouteByRouteIdBusStation(options) {
     return __awaiter(this, void 0, void 0, function* () {
+        const route = yield models_1.Route.findOne({
+            where: {
+                id: options.routeId
+            }
+        });
+        yield models_1.BusRouteStation.destroy({
+            where: {
+                routeId: route.id,
+            }
+        });
+        for (const busStation of options.busStations) {
+            yield models_1.BusRouteStation.create({
+                routeId: route.id,
+                busStationId: busStation.id
+            });
+        }
         return {
             status: 200,
             data: 'postRouteByRouteidBusStation ok!'
@@ -72,9 +142,24 @@ function postRouteByRouteIdBusStation(options) {
  */
 function getRouteByRouteId(options) {
     return __awaiter(this, void 0, void 0, function* () {
+        const route = yield models_1.Route.findOne({
+            where: {
+                id: options.routeId
+            },
+            include: [
+                {
+                    model: models_1.RouteSchedule
+                },
+                {
+                    model: models_1.BusRouteStation
+                }
+            ]
+        });
         return {
             status: 200,
-            data: 'getRouteByRouteid ok!'
+            data: {
+                route
+            }
         };
     });
 }
@@ -82,7 +167,8 @@ exports.default = {
     postRoute,
     getRoute,
     putRouteByRouteIdSchedule,
-    postRouteByRouteIdBusStation,
-    getRouteByRouteId
+    putRouteByRouteIdBusStation,
+    getRouteByRouteId,
+    postShift
 };
 //# sourceMappingURL=route.js.map

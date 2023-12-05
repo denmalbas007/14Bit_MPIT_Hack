@@ -16,9 +16,29 @@ const express_1 = __importDefault(require("express"));
 const route_1 = __importDefault(require("../services/route"));
 const router = express_1.default.Router();
 router.post('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const options = {};
+    const options = {
+        name: req.body['name']
+    };
     try {
         const result = yield route_1.default.postRoute(options);
+        res.status(200).send(result.data);
+    }
+    catch (err) {
+        return res.status(500).send({
+            status: 500,
+            error: 'Server Error'
+        });
+    }
+}));
+router.post('/:routeId/shift', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const options = {
+        driverId: req.body['driverId'],
+        startsAt: req.body['startsAt'],
+        endsAt: req.body['endsAt'],
+        routeId: req.params['routeId']
+    };
+    try {
+        const result = yield route_1.default.postShift(options);
         res.status(200).send(result.data);
     }
     catch (err) {
@@ -43,7 +63,8 @@ router.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
 }));
 router.put('/:routeId/schedule', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const options = {
-        schedules: req.query['schedules']
+        schedules: req.body['schedules'],
+        routeId: req.params['routeId']
     };
     try {
         const result = yield route_1.default.putRouteByRouteIdSchedule(options);
@@ -56,12 +77,13 @@ router.put('/:routeId/schedule', (req, res, next) => __awaiter(void 0, void 0, v
         });
     }
 }));
-router.post('/:routeId/bus_station', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.put('/:routeId/bus_station', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const options = {
-        busStationId: req.query['busStationId']
+        busStationId: req.body['busStationId'],
+        routeId: req.params["routeId"]
     };
     try {
-        const result = yield route_1.default.postRouteByRouteIdBusStation(options);
+        const result = yield route_1.default.putRouteByRouteIdBusStation(options);
         res.status(200).send(result.data);
     }
     catch (err) {

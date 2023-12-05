@@ -7,9 +7,9 @@ const router = express.Router();
 
 router.post('/', async (req, res, next) => {
   const options = {
-    plateNumber: req.query['plateNumber'],
-    modelName: req.query['modelName'],
-    serialNumber: req.query['serialNumber']
+    plateNumber: req.body['plateNumber'],
+    modelName: req.body['modelName'],
+    serialNumber: req.body['serialNumber']
   };
 
   try {
@@ -56,9 +56,9 @@ router.get('/:busId', async (req, res, next) => {
 });
 router.put('/:busId/location', async (req, res, next) => {
   const options = {
-    busId: req.params['busId'],
-    latitude: req.query['latitude'],
-    longitude: req.query['longitude']
+    busId: req.body['busId'],
+    latitude: req.body['latitude'],
+    longitude: req.body['longitude']
   };
 
   try {

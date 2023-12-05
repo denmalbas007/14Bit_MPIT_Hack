@@ -1,9 +1,11 @@
+
+import {BusRouteStation, BusStation, Route} from "../database/models";
+
 /**
  * @param {Object} options
  * @throws {Error}
  * @return {Promise}
  */
-import {BusRouteStation, BusStation, Route} from "../database/models";
 
 async function getBusStations(options) {
 
@@ -23,6 +25,7 @@ async function getBusStations(options) {
  * @throws {Error}
  * @return {Promise}
  */
+
 async function postBusStation(options) {
 
   const busStation = await BusStation.create({
@@ -38,7 +41,7 @@ async function postBusStation(options) {
 
 /**
  * @param {Object} options
- * @param {Integer} options.busStationId 
+ * @param {Number} options.busStationId
  * @throws {Error}
  * @return {Promise}
  */
@@ -53,7 +56,7 @@ async function getBusStationByBusStationId(options) {
       busStationId: busStation.id
     }
   })
-  let routes = []
+  const routes = []
   for (const routeStation of busRouteStations) {
     const route = await Route.findOne({
       where: {
