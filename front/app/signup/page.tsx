@@ -23,14 +23,12 @@ import { Inter } from "next/font/google";
 import { useState } from "react";
 
 const inter = Inter({
-  weight: "400", // if single weight, otherwise you use array like [400, 500, 700],
+  weight: "700", // if single weight, otherwise you use array like [400, 500, 700],
   style: "normal", // if single style, otherwise you use array like ['normal', 'italic']
   subsets: ["latin"],
 });
 
 export default function SignUp() {
-  const [groupSelected, setGroupSelected] = useState([]);
-
   return (
     <div>
       <Card
@@ -67,13 +65,16 @@ export default function SignUp() {
             className="mb-3"
           />
 
-          <RadioGroup label="" description="" className="mb-3">
+          <RadioGroup
+            label=""
+            description=""
+            className="mb-3"
+            defaultValue="passanger"
+          >
             <RolesRadio description="" value="dispatcher">
               Я диспетчер автобуса
             </RolesRadio>
-            <RolesRadio value="driver">
-              Я водитель автобуса
-            </RolesRadio>
+            <RolesRadio value="driver">Я водитель автобуса</RolesRadio>
             <RolesRadio description="" value="passanger">
               Я пассажир
             </RolesRadio>
