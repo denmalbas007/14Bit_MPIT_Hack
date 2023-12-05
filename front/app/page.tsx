@@ -30,11 +30,13 @@ export default function Home() {
           <CardBody className="content-center justify-center">
             <Button color="primary">Войти</Button>
             <div className={inter.className}>
-              <div className="text-white text-opacity-50 text-base font-medium leading-normal text-center">
+              <div className="text-white text-opacity-50 text-base font-medium leading-normal text-center mb-3 mt-3">
                 или
               </div>
             </div>
-            <Button variant="bordered">Зарегистрироваться</Button>
+            <Button variant="bordered" className="text-white border-white">
+              Зарегистрироваться
+            </Button>
           </CardBody>
         </Card>
       </div>
