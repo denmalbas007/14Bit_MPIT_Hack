@@ -3,14 +3,32 @@ import {PassengerSim} from "./PassengerSim";
 import {StationSim} from "./StationSim";
 export class RouteSim {
     routeId = 0
+    routeName = ""
     buses: Array<BusSim>
     stations: Array<StationSim>
-    constructor(routeId) {
+    constructor(routeId, routeName) {
         this.routeId = routeId
     }
 
     addBus(bus: BusSim) {
         this.buses.push(bus)
+    }
+
+    __startBusOrientation(orientation) {
+        let maxRestElapsed = 0
+        let maxRestBusIndex = 0
+        for (let i = 0; i < this.buses.length; ++i) {
+            if (this.buses[i].orientation === orientation && this.buses[i].has_started === "waiting" && this.buses[i].restTimeElapsed > maxRestElapsed) {
+                maxRestElapsed = this.buses[i].restTimeElapsed;
+                maxRestBusIndex = i
+            }
+        }
+        this.buses[maxRestBusIndex].startShift()
+
+    }
+    startBus() {
+        this.__startBusOrientation(1);
+        this.__startBusOrientation(0);
     }
     _willBusGoThroughStation(stationFromId,stationToId, orientation) {
         if (this.stations.findIndex((station) => station.stationId === stationFromId ) >=

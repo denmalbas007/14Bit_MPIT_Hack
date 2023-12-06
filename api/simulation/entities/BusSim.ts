@@ -20,10 +20,12 @@ export class BusSim {
     latitude = 0
     longitude = 0
 
-    constructor({busId, orientation, stations}) {
+    constructor(busId, orientation, stations) {
         this.busId = busId;
-        this.orientation = orientation
+
         this.stations = stations
+
+        this.orientation = orientation
     }
     addPassenger(passenger: PassengerSim) {
         this.passengers.push(passenger)
