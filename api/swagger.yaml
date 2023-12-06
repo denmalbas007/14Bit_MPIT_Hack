@@ -1,0 +1,379 @@
+openapi: 3.0.3
+info:
+  title: mpit_2023_final
+  version: 1.0.0
+paths:
+  /accident:
+    get:
+      tags:
+        - ACCIDENT
+      responses:
+        '200':
+          description: ok
+    post:
+      tags:
+        - ACCIDENT
+      parameters:
+        - name: busId
+          in: query
+          required: true
+          schema:
+            type:
+              integer
+        - name: driverId
+          in: query
+          required: true
+          schema:
+            type:
+              integer
+      responses:
+        '200':
+          description: ok
+  /chat:
+    get:
+      tags:
+        - CHAT
+      responses:
+        '200':
+          description: ok
+  /chat/{userId}:
+    get:
+      tags:
+        - CHAT
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type:
+              integer
+        - name: firstMessageAt
+          in: query
+          required: false
+          schema:
+            type:
+              object
+      responses:
+        '200':
+          description: ok
+    post:
+      tags:
+        - CHAT
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type:
+              integer
+        - name: content
+          required: true
+          schema:
+            type:
+              object
+          in: query
+      responses:
+        '200':
+          description: ok
+  /bus_station:
+    get:
+      tags:
+        - BUS_STATION
+      responses:
+        '200':
+          description: ok
+    post:
+      tags:
+        - BUS_STATION
+      parameters:
+        - name: longitude
+          in: query
+          required: true
+          schema:
+            type:
+              number
+        - name: latitude
+          in: query
+          required: true
+          schema:
+            type:
+              number
+        - name: name
+          in: query
+          required: true
+          schema:
+            type:
+              string
+      responses:
+        '200':
+          description: ok
+  /bus_station/{busStationId}:
+    get:
+      tags:
+        - BUS_STATION
+      parameters:
+        - name: busStationId
+          in: path
+          required: true
+          schema:
+            type:
+              integer
+      responses:
+        '200':
+          description: ok
+
+      description:
+        Получить остановку с её маршрутами
+  /bus:
+    get:
+      tags:
+        - BUS
+      responses:
+        '200':
+          description: ok
+    post:
+      tags:
+        - BUS
+      parameters:
+        - name: plateNumber
+          in: query
+          required: true
+          schema:
+            type:
+              string
+        - name: modelName
+          in: query
+          required: true
+          schema:
+            type:
+              string
+        - name: serialNumber
+          in: query
+          required: true
+          schema:
+            type:
+              string
+      responses:
+        '200':
+          description: ok
+  /bus/{busId}:
+    get:
+      tags:
+        - BUS
+      description:
+        Получить автобус с его водителем и маршрутом
+      parameters:
+        - name: busId
+          in: path
+          required: true
+          schema:
+            type:
+              integer
+      responses:
+        '200':
+          description: ok
+  /bus/{busId}/location:
+    put:
+      tags:
+        - BUS
+      parameters:
+        - name: latitude
+          in: query
+          required: true
+          schema:
+            type:
+              number
+        - name: busId
+          in: path
+          required: true
+          schema:
+            type:
+              integer
+        - name: longitude
+          in: query
+          required: true
+          schema:
+            type:
+              number
+      responses:
+        '200':
+          description: ok
+  /route:
+    post:
+      tags:
+        - ROUTE
+      parameters:
+        - name: name
+          in: query
+          required: true
+          schema:
+            type:
+              string
+      responses:
+        '200':
+          description: ok
+    get:
+      tags:
+        - ROUTE
+      responses:
+        '200':
+          description: ok
+  /route/{routeId}/schedule:
+    put:
+      description:
+        Поменять расписание. Получаем массив с расписаниями вида timeOfStart, timeOfEnd, frequency. Первые два - дата, вторая - строка типа "каждые 5 минут"
+      tags:
+        - ROUTE
+      parameters:
+        - name: schedules
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              properties:
+                schedule:
+                  type: string
+        - name: routeId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ok
+  /route/{routeId}/bus_station:
+    put:
+      tags:
+        - ROUTE
+      parameters:
+        - name: routeId
+          in: path
+          required: true
+          schema:
+            type: number
+        - name: busStations
+          in: query
+          required: true
+          schema:
+            type:
+              object
+      responses:
+        '200':
+          description: ok
+  /route/{routeId}:
+    get:
+      tags:
+        - ROUTE
+      description:
+        Получить маршрут с его расписанием и остановками
+      parameters:
+        - name: routeId
+          in: path
+          required: true
+          schema:
+            type:
+              integer
+      responses:
+        '200':
+          description: ok
+  /auth/signin:
+    post:
+      tags:
+        - USER
+      parameters:
+        - name: email
+          in: query
+          required: true
+          schema:
+            type:
+              string
+        - name: password
+          in: query
+          required: true
+          schema:
+            type:
+              string
+      responses:
+        '200':
+          description: ok
+  /auth/signup:
+    post:
+      tags:
+        - USER
+      parameters:
+        - name: firstName
+          in: query
+          required: true
+          schema:
+            type:
+              string
+        - name: lastName
+          in: query
+          required: true
+          schema:
+            type:
+              string
+        - name: email
+          in: query
+          required: true
+          schema:
+            type:
+              string
+        - name: password
+          in: query
+          required: true
+          schema:
+            type:
+              string
+        - name: userType
+          in: query
+          required: true
+          schema:
+            type:
+              string
+            enum:
+              - passenger
+              - driver
+              - dispatcher
+      responses:
+        '200':
+          description: ok
+  /route/{routeId}/shift:
+    post:
+      tags:
+        - ROUTE
+      parameters:
+        - name: routeId
+          in: path
+          required: true
+          schema:
+            type: number
+        - name: driverId
+          in: query
+          required: true
+          schema:
+            type:
+              integer
+        - name: startsAt
+          in: query
+          required: true
+          schema:
+            type:
+              object
+        - name: endsAt
+          in: query
+          required: true
+          schema:
+            type:
+              object
+      responses:
+        '200':
+          description: ok
+  /statistics:
+    get:
+      tags:
+        - STATISTICS
+      responses:
+        '200':
+          description: ok

@@ -22,8 +22,6 @@ async function start_simulation() {
         }]
     });
     const routesSim: Array<RouteSim> = []
-
-
     for (const route of routes) {
         const busStations: Array<StationSim> = []
         for (const routeStation of route.busRouteStations) {
