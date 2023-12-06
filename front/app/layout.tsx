@@ -46,7 +46,7 @@ export default function RootLayout({
               <img src="logo.svg" alt="TimeBus" />
             </NextLink>
 
-            {!["/", "/signup"].includes(pathname) && (
+            {["/map", "/schedule", "/chat", "/buses", "/health", "/report", "/statistics", "/settings", "/logout"].includes(pathname) && (
               <nav className="fixed top-0 left-0 w-64 h-screen px-4 py-8 bg-neutral-800 -z-20">
                 <Tabs
                   aria-label="Options"
@@ -84,7 +84,6 @@ export default function RootLayout({
                         <span>Чат с водителем</span>
                       </div>
                     }
-                    href="/chat"
                   ></Tab>
                   <Tab
                     key="/buses"
@@ -97,7 +96,6 @@ export default function RootLayout({
                         <span>Список автобусов</span>
                       </div>
                     }
-                    href="/buses"
                   ></Tab>
                   <Tab
                     key="/report"
@@ -110,7 +108,6 @@ export default function RootLayout({
                         <span>Реагирование</span>
                       </div>
                     }
-                    href="/report"
                   ></Tab>
                   <Tab
                     key="/statistics"
@@ -123,7 +120,6 @@ export default function RootLayout({
                         <span>Статистика</span>
                       </div>
                     }
-                    href="/statistics"
                   ></Tab>
                   <Tab
                     className="mb-28"
@@ -134,7 +130,6 @@ export default function RootLayout({
                         <span>Здоровье</span>
                       </div>
                     }
-                    href="/health"
                   ></Tab>
                   <Tab
                     key="/settings"
@@ -144,7 +139,6 @@ export default function RootLayout({
                         <span>Настройки</span>
                       </div>
                     }
-                    href="/settings"
                   ></Tab>
                   <Tab
                     key="/logout"
@@ -154,7 +148,6 @@ export default function RootLayout({
                         <span>Выйти</span>
                       </div>
                     }
-                    href="/logout"
                   ></Tab>
                 </Tabs>
               </nav>
