@@ -8,9 +8,10 @@ jobs:
     runs-on: [self-hosted, prod]
 
     steps:
-      - run: cd /var/www/14-bit/www/mpit2023_final
-      - run: git pull origin back
-      - run: cd /var/www/14-bit/www/mpit2023_final/api
-      - run: yarn
-      - run: yarn build
-      - run: yarn start
+      - run: |
+          cd /var/www/14-bit/www/mpit2023_final
+          git pull origin back
+          cd /var/www/14-bit/www/mpit2023_final/api
+          yarn
+          yarn build
+          yarn start
