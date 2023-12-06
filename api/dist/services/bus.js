@@ -112,7 +112,12 @@ function putLocation(options) {
         bus.latitude = options.latitude;
         bus.longitude = options.longitude;
         yield bus.save();
-        return bus;
+        return {
+            status: 200,
+            data: {
+                bus
+            }
+        };
     });
 }
 exports.default = {

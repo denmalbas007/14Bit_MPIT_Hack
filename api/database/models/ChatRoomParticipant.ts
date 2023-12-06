@@ -17,9 +17,9 @@ import type { User } from './User'
 type ChatRoomParticipantAssociations = 'user' | 'chatRoom'
 
 export class ChatRoomParticipant extends Model<
-  InferAttributes<ChatRoomParticipant, {omit: ChatRoomParticipantAssociations}>,
-  InferCreationAttributes<ChatRoomParticipant, {omit: ChatRoomParticipantAssociations}>
-> {
+    InferAttributes<ChatRoomParticipant, {omit: ChatRoomParticipantAssociations}>,
+    InferCreationAttributes<ChatRoomParticipant, {omit: ChatRoomParticipantAssociations}>
+    > {
   declare id: CreationOptional<number>
   declare participantId: number | null
   declare roomId: number | null
@@ -31,13 +31,13 @@ export class ChatRoomParticipant extends Model<
   declare getUser: BelongsToGetAssociationMixin<User>
   declare setUser: BelongsToSetAssociationMixin<User, number>
   declare createUser: BelongsToCreateAssociationMixin<User>
-  
+
   // ChatRoomParticipant belongsTo ChatRoom
   declare chatRoom?: NonAttribute<ChatRoom>
   declare getChatRoom: BelongsToGetAssociationMixin<ChatRoom>
   declare setChatRoom: BelongsToSetAssociationMixin<ChatRoom, number>
   declare createChatRoom: BelongsToCreateAssociationMixin<ChatRoom>
-  
+
   declare static associations: {
     user: Association<ChatRoomParticipant, User>,
     chatRoom: Association<ChatRoomParticipant, ChatRoom>
@@ -66,7 +66,7 @@ export class ChatRoomParticipant extends Model<
     }, {
       sequelize
     })
-    
+
     return ChatRoomParticipant
   }
 }

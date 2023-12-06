@@ -16,9 +16,9 @@ import type { Route } from './Route'
 type RouteScheduleAssociations = 'route'
 
 export class RouteSchedule extends Model<
-  InferAttributes<RouteSchedule, {omit: RouteScheduleAssociations}>,
-  InferCreationAttributes<RouteSchedule, {omit: RouteScheduleAssociations}>
-> {
+    InferAttributes<RouteSchedule, {omit: RouteScheduleAssociations}>,
+    InferCreationAttributes<RouteSchedule, {omit: RouteScheduleAssociations}>
+    > {
   declare id: CreationOptional<number>
   declare routeId: number | null
   declare timeOfStart: Date | null
@@ -32,7 +32,7 @@ export class RouteSchedule extends Model<
   declare getRoute: BelongsToGetAssociationMixin<Route>
   declare setRoute: BelongsToSetAssociationMixin<Route, number>
   declare createRoute: BelongsToCreateAssociationMixin<Route>
-  
+
   declare static associations: {
     route: Association<RouteSchedule, Route>
   }
@@ -66,7 +66,7 @@ export class RouteSchedule extends Model<
     }, {
       sequelize
     })
-    
+
     return RouteSchedule
   }
 }

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.initModels = exports.Op = exports.ChatMessageContent = exports.ChatMessage = exports.ChatRoomParticipant = exports.ChatRoom = exports.BusStation = exports.BusRouteStation = exports.RouteSchedule = exports.Route = exports.Shift = exports.Bus = exports.UserNotification = exports.User = void 0;
+exports.initModels = exports.Op = exports.Accident = exports.ChatMessageContent = exports.ChatMessage = exports.ChatRoomParticipant = exports.ChatRoom = exports.BusStation = exports.BusRouteStation = exports.RouteSchedule = exports.Route = exports.Shift = exports.Bus = exports.UserNotification = exports.User = void 0;
 const sequelize_1 = require("sequelize");
 Object.defineProperty(exports, "Op", { enumerable: true, get: function () { return sequelize_1.Op; } });
 const User_1 = require("./User");
@@ -27,6 +27,8 @@ const ChatMessage_1 = require("./ChatMessage");
 Object.defineProperty(exports, "ChatMessage", { enumerable: true, get: function () { return ChatMessage_1.ChatMessage; } });
 const ChatMessageContent_1 = require("./ChatMessageContent");
 Object.defineProperty(exports, "ChatMessageContent", { enumerable: true, get: function () { return ChatMessageContent_1.ChatMessageContent; } });
+const Accident_1 = require("./Accident");
+Object.defineProperty(exports, "Accident", { enumerable: true, get: function () { return Accident_1.Accident; } });
 function initModels(sequelize) {
     User_1.User.initModel(sequelize);
     UserNotification_1.UserNotification.initModel(sequelize);
@@ -40,6 +42,7 @@ function initModels(sequelize) {
     ChatRoomParticipant_1.ChatRoomParticipant.initModel(sequelize);
     ChatMessage_1.ChatMessage.initModel(sequelize);
     ChatMessageContent_1.ChatMessageContent.initModel(sequelize);
+    Accident_1.Accident.initModel(sequelize);
     User_1.User.hasMany(UserNotification_1.UserNotification, {
         as: 'userNotifications',
         foreignKey: 'user_id'
@@ -136,6 +139,14 @@ function initModels(sequelize) {
         as: 'chatMessage',
         foreignKey: 'message_id'
     });
+    Accident_1.Accident.belongsTo(Bus_1.Bus, {
+        as: 'bus',
+        foreignKey: 'bus_id'
+    });
+    Accident_1.Accident.belongsTo(User_1.User, {
+        as: 'user',
+        foreignKey: 'driver_id'
+    });
     return {
         User: User_1.User,
         UserNotification: UserNotification_1.UserNotification,
@@ -148,7 +159,8 @@ function initModels(sequelize) {
         ChatRoom: ChatRoom_1.ChatRoom,
         ChatRoomParticipant: ChatRoomParticipant_1.ChatRoomParticipant,
         ChatMessage: ChatMessage_1.ChatMessage,
-        ChatMessageContent: ChatMessageContent_1.ChatMessageContent
+        ChatMessageContent: ChatMessageContent_1.ChatMessageContent,
+        Accident: Accident_1.Accident
     };
 }
 exports.initModels = initModels;

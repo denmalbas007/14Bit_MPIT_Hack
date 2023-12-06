@@ -23,9 +23,9 @@ import type { BusRouteStation } from './BusRouteStation'
 type BusStationAssociations = 'busRouteStations'
 
 export class BusStation extends Model<
-  InferAttributes<BusStation, {omit: BusStationAssociations}>,
-  InferCreationAttributes<BusStation, {omit: BusStationAssociations}>
-> {
+    InferAttributes<BusStation, {omit: BusStationAssociations}>,
+    InferCreationAttributes<BusStation, {omit: BusStationAssociations}>
+    > {
   declare id: CreationOptional<number>
   declare name: string | null
   declare longitude: number | null
@@ -45,7 +45,7 @@ export class BusStation extends Model<
   declare hasBusRouteStation: HasManyHasAssociationMixin<BusRouteStation, number>
   declare hasBusRouteStations: HasManyHasAssociationsMixin<BusRouteStation, number>
   declare countBusRouteStations: HasManyCountAssociationsMixin
-  
+
   declare static associations: {
     busRouteStations: Association<BusStation, BusRouteStation>
   }
@@ -76,7 +76,7 @@ export class BusStation extends Model<
     }, {
       sequelize
     })
-    
+
     return BusStation
   }
 }

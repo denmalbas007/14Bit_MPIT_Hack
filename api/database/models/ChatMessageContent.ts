@@ -16,9 +16,9 @@ import type { ChatMessage } from './ChatMessage'
 type ChatMessageContentAssociations = 'chatMessage'
 
 export class ChatMessageContent extends Model<
-  InferAttributes<ChatMessageContent, {omit: ChatMessageContentAssociations}>,
-  InferCreationAttributes<ChatMessageContent, {omit: ChatMessageContentAssociations}>
-> {
+    InferAttributes<ChatMessageContent, {omit: ChatMessageContentAssociations}>,
+    InferCreationAttributes<ChatMessageContent, {omit: ChatMessageContentAssociations}>
+    > {
   declare id: CreationOptional<number>
   declare messageId: number | null
   declare contentType: string | null
@@ -31,7 +31,7 @@ export class ChatMessageContent extends Model<
   declare getChatMessage: BelongsToGetAssociationMixin<ChatMessage>
   declare setChatMessage: BelongsToSetAssociationMixin<ChatMessage, number>
   declare createChatMessage: BelongsToCreateAssociationMixin<ChatMessage>
-  
+
   declare static associations: {
     chatMessage: Association<ChatMessageContent, ChatMessage>
   }
@@ -62,7 +62,7 @@ export class ChatMessageContent extends Model<
     }, {
       sequelize
     })
-    
+
     return ChatMessageContent
   }
 }

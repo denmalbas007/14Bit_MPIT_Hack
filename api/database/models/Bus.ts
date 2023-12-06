@@ -18,9 +18,10 @@ import {
   NonAttribute,
   Sequelize
 } from 'sequelize'
+import type { Accident } from './Accident'
 import type { Shift } from './Shift'
 
-type BusAssociations = 'shifts'
+type BusAssociations = 'shifts' | 'accidents'
 
 export class Bus extends Model<
     InferAttributes<Bus, {omit: BusAssociations}>,
@@ -51,8 +52,22 @@ export class Bus extends Model<
   declare hasShifts: HasManyHasAssociationsMixin<Shift, number>
   declare countShifts: HasManyCountAssociationsMixin
 
+  // Bus hasMany Accident
+  declare accidents?: NonAttribute<Accident[]>
+  declare getAccidents: HasManyGetAssociationsMixin<Accident>
+  declare setAccidents: HasManySetAssociationsMixin<Accident, number>
+  declare addAccident: HasManyAddAssociationMixin<Accident, number>
+  declare addAccidents: HasManyAddAssociationsMixin<Accident, number>
+  declare createAccident: HasManyCreateAssociationMixin<Accident, 'busId'>
+  declare removeAccident: HasManyRemoveAssociationMixin<Accident, number>
+  declare removeAccidents: HasManyRemoveAssociationsMixin<Accident, number>
+  declare hasAccident: HasManyHasAssociationMixin<Accident, number>
+  declare hasAccidents: HasManyHasAssociationsMixin<Accident, number>
+  declare countAccidents: HasManyCountAssociationsMixin
+
   declare static associations: {
-    shifts: Association<Bus, Shift>
+    shifts: Association<Bus, Shift>,
+    accidents: Association<Bus, Accident>
   }
 
   static initModel(sequelize: Sequelize): typeof Bus {

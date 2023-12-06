@@ -17,9 +17,9 @@ import type { Route } from './Route'
 type BusRouteStationAssociations = 'busRouteStation' | 'busStation' | 'route'
 
 export class BusRouteStation extends Model<
-  InferAttributes<BusRouteStation, {omit: BusRouteStationAssociations}>,
-  InferCreationAttributes<BusRouteStation, {omit: BusRouteStationAssociations}>
-> {
+    InferAttributes<BusRouteStation, {omit: BusRouteStationAssociations}>,
+    InferCreationAttributes<BusRouteStation, {omit: BusRouteStationAssociations}>
+    > {
   declare id: CreationOptional<number>
   declare routeId: number | null
   declare busStationId: number | null
@@ -32,19 +32,19 @@ export class BusRouteStation extends Model<
   declare getBusRouteStation: BelongsToGetAssociationMixin<BusRouteStation>
   declare setBusRouteStation: BelongsToSetAssociationMixin<BusRouteStation, number>
   declare createBusRouteStation: BelongsToCreateAssociationMixin<BusRouteStation>
-  
+
   // BusRouteStation belongsTo BusStation
   declare busStation?: NonAttribute<BusStation>
   declare getBusStation: BelongsToGetAssociationMixin<BusStation>
   declare setBusStation: BelongsToSetAssociationMixin<BusStation, number>
   declare createBusStation: BelongsToCreateAssociationMixin<BusStation>
-  
+
   // BusRouteStation belongsTo Route
   declare route?: NonAttribute<Route>
   declare getRoute: BelongsToGetAssociationMixin<Route>
   declare setRoute: BelongsToSetAssociationMixin<Route, number>
   declare createRoute: BelongsToCreateAssociationMixin<Route>
-  
+
   declare static associations: {
     busRouteStation: Association<BusRouteStation, BusRouteStation>,
     busStation: Association<BusRouteStation, BusStation>,
@@ -77,7 +77,7 @@ export class BusRouteStation extends Model<
     }, {
       sequelize
     })
-    
+
     return BusRouteStation
   }
 }

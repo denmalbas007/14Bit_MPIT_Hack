@@ -24,9 +24,9 @@ import type { ChatRoomParticipant } from './ChatRoomParticipant'
 type ChatRoomAssociations = 'chatRoomParticipants' | 'chatMessages'
 
 export class ChatRoom extends Model<
-  InferAttributes<ChatRoom, {omit: ChatRoomAssociations}>,
-  InferCreationAttributes<ChatRoom, {omit: ChatRoomAssociations}>
-> {
+    InferAttributes<ChatRoom, {omit: ChatRoomAssociations}>,
+    InferCreationAttributes<ChatRoom, {omit: ChatRoomAssociations}>
+    > {
   declare id: CreationOptional<number>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
@@ -43,7 +43,7 @@ export class ChatRoom extends Model<
   declare hasChatRoomParticipant: HasManyHasAssociationMixin<ChatRoomParticipant, number>
   declare hasChatRoomParticipants: HasManyHasAssociationsMixin<ChatRoomParticipant, number>
   declare countChatRoomParticipants: HasManyCountAssociationsMixin
-  
+
   // ChatRoom hasMany ChatMessage
   declare chatMessages?: NonAttribute<ChatMessage[]>
   declare getChatMessages: HasManyGetAssociationsMixin<ChatMessage>
@@ -56,7 +56,7 @@ export class ChatRoom extends Model<
   declare hasChatMessage: HasManyHasAssociationMixin<ChatMessage, number>
   declare hasChatMessages: HasManyHasAssociationsMixin<ChatMessage, number>
   declare countChatMessages: HasManyCountAssociationsMixin
-  
+
   declare static associations: {
     chatRoomParticipants: Association<ChatRoom, ChatRoomParticipant>,
     chatMessages: Association<ChatRoom, ChatMessage>
@@ -79,7 +79,7 @@ export class ChatRoom extends Model<
     }, {
       sequelize
     })
-    
+
     return ChatRoom
   }
 }

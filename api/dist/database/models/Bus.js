@@ -29,6 +29,12 @@ class Bus extends sequelize_1.Model {
             levelOfCharge: {
                 type: sequelize_1.DataTypes.DOUBLE
             },
+            capacity: {
+                type: sequelize_1.DataTypes.BIGINT
+            },
+            passengerCount: {
+                type: sequelize_1.DataTypes.BIGINT
+            },
             createdAt: {
                 type: sequelize_1.DataTypes.DATE
             },

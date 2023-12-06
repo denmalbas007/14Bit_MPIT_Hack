@@ -35,6 +35,7 @@ router.post('/signup', (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     const options = {
         firstName: req.body['firstName'],
         lastName: req.body['lastName'],
+        userType: req.body['userType'],
         email: req.body['email'],
         password: req.body['password'],
     };

@@ -28,9 +28,9 @@ import type { ChatRoomParticipant } from './ChatRoomParticipant'
 type ChatMessageAssociations = 'chatRoom' | 'chatRoomParticipant' | 'chatMessageContents'
 
 export class ChatMessage extends Model<
-  InferAttributes<ChatMessage, {omit: ChatMessageAssociations}>,
-  InferCreationAttributes<ChatMessage, {omit: ChatMessageAssociations}>
-> {
+    InferAttributes<ChatMessage, {omit: ChatMessageAssociations}>,
+    InferCreationAttributes<ChatMessage, {omit: ChatMessageAssociations}>
+    > {
   declare id: CreationOptional<number>
   declare roomId: number | null
   declare senderId: number | null
@@ -42,13 +42,13 @@ export class ChatMessage extends Model<
   declare getChatRoom: BelongsToGetAssociationMixin<ChatRoom>
   declare setChatRoom: BelongsToSetAssociationMixin<ChatRoom, number>
   declare createChatRoom: BelongsToCreateAssociationMixin<ChatRoom>
-  
+
   // ChatMessage belongsTo ChatRoomParticipant
   declare chatRoomParticipant?: NonAttribute<ChatRoomParticipant>
   declare getChatRoomParticipant: BelongsToGetAssociationMixin<ChatRoomParticipant>
   declare setChatRoomParticipant: BelongsToSetAssociationMixin<ChatRoomParticipant, number>
   declare createChatRoomParticipant: BelongsToCreateAssociationMixin<ChatRoomParticipant>
-  
+
   // ChatMessage hasMany ChatMessageContent
   declare chatMessageContents?: NonAttribute<ChatMessageContent[]>
   declare getChatMessageContents: HasManyGetAssociationsMixin<ChatMessageContent>
@@ -61,7 +61,7 @@ export class ChatMessage extends Model<
   declare hasChatMessageContent: HasManyHasAssociationMixin<ChatMessageContent, number>
   declare hasChatMessageContents: HasManyHasAssociationsMixin<ChatMessageContent, number>
   declare countChatMessageContents: HasManyCountAssociationsMixin
-  
+
   declare static associations: {
     chatRoom: Association<ChatMessage, ChatRoom>,
     chatRoomParticipant: Association<ChatMessage, ChatRoomParticipant>,
@@ -91,7 +91,7 @@ export class ChatMessage extends Model<
     }, {
       sequelize
     })
-    
+
     return ChatMessage
   }
 }
