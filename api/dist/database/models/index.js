@@ -55,6 +55,10 @@ function initModels(sequelize) {
         as: 'chatRoomParticipants',
         foreignKey: 'participant_id'
     });
+    User_1.User.hasMany(Accident_1.Accident, {
+        as: 'accidents',
+        foreignKey: 'driver_id'
+    });
     UserNotification_1.UserNotification.belongsTo(User_1.User, {
         as: 'user',
         foreignKey: 'user_id'
@@ -63,8 +67,12 @@ function initModels(sequelize) {
         as: 'shifts',
         foreignKey: 'bus_id'
     });
+    Bus_1.Bus.hasMany(Accident_1.Accident, {
+        as: 'accidents',
+        foreignKey: 'bus_id'
+    });
     Shift_1.Shift.belongsTo(User_1.User, {
-        as: 'user',
+        as: 'driver',
         foreignKey: 'driver_id'
     });
     Shift_1.Shift.belongsTo(Bus_1.Bus, {
@@ -144,7 +152,7 @@ function initModels(sequelize) {
         foreignKey: 'bus_id'
     });
     Accident_1.Accident.belongsTo(User_1.User, {
-        as: 'user',
+        as: 'driver',
         foreignKey: 'driver_id'
     });
     return {

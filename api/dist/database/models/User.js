@@ -1,38 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
+exports.UserNotification = void 0;
 const sequelize_1 = require("sequelize");
-class User extends sequelize_1.Model {
+class UserNotification extends sequelize_1.Model {
     static initModel(sequelize) {
-        User.init({
+        UserNotification.init({
             id: {
-                type: sequelize_1.DataTypes.BIGINT,
+                type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
                 primaryKey: true,
-                autoIncrement: true
+                autoIncrement: true,
+                allowNull: false
             },
-            email: {
+            userId: {
+                type: sequelize_1.DataTypes.BIGINT
+            },
+            content: {
                 type: sequelize_1.DataTypes.TEXT
             },
-            lastName: {
+            type: {
                 type: sequelize_1.DataTypes.TEXT
             },
-            dateOfBirth: {
-                type: sequelize_1.DataTypes.DATEONLY
-            },
-            secureSessionId: {
-                type: sequelize_1.DataTypes.TEXT
-            },
-            passwordHash: {
-                type: sequelize_1.DataTypes.TEXT
-            },
-            passwordSalt: {
-                type: sequelize_1.DataTypes.TEXT
-            },
-            firstName: {
-                type: sequelize_1.DataTypes.TEXT
-            },
-            userType: {
-                type: sequelize_1.DataTypes.TEXT
+            isSuggestion: {
+                type: sequelize_1.DataTypes.BOOLEAN
             },
             createdAt: {
                 type: sequelize_1.DataTypes.DATE
@@ -43,8 +32,8 @@ class User extends sequelize_1.Model {
         }, {
             sequelize
         });
-        return User;
+        return UserNotification;
     }
 }
-exports.User = User;
+exports.UserNotification = UserNotification;
 //# sourceMappingURL=User.js.map

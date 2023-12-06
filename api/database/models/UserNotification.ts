@@ -16,9 +16,9 @@ import type { User } from './User'
 type UserNotificationAssociations = 'user'
 
 export class UserNotification extends Model<
-  InferAttributes<UserNotification, {omit: UserNotificationAssociations}>,
-  InferCreationAttributes<UserNotification, {omit: UserNotificationAssociations}>
-> {
+    InferAttributes<UserNotification, {omit: UserNotificationAssociations}>,
+    InferCreationAttributes<UserNotification, {omit: UserNotificationAssociations}>
+    > {
   declare id: CreationOptional<number>
   declare userId: number | null
   declare content: string | null
@@ -32,7 +32,7 @@ export class UserNotification extends Model<
   declare getUser: BelongsToGetAssociationMixin<User>
   declare setUser: BelongsToSetAssociationMixin<User, number>
   declare createUser: BelongsToCreateAssociationMixin<User>
-  
+
   declare static associations: {
     user: Association<UserNotification, User>
   }
@@ -66,7 +66,7 @@ export class UserNotification extends Model<
     }, {
       sequelize
     })
-    
+
     return UserNotification
   }
 }
