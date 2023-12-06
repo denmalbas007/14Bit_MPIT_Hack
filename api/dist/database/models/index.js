@@ -44,115 +44,87 @@ function initModels(sequelize) {
     ChatMessageContent_1.ChatMessageContent.initModel(sequelize);
     Accident_1.Accident.initModel(sequelize);
     User_1.User.hasMany(UserNotification_1.UserNotification, {
-        as: 'userNotifications',
         foreignKey: 'user_id'
     });
     User_1.User.hasMany(Shift_1.Shift, {
-        as: 'shifts',
         foreignKey: 'driver_id'
     });
     User_1.User.hasMany(ChatRoomParticipant_1.ChatRoomParticipant, {
-        as: 'chatRoomParticipants',
         foreignKey: 'participant_id'
     });
     User_1.User.hasMany(Accident_1.Accident, {
-        as: 'accidents',
         foreignKey: 'driver_id'
     });
     UserNotification_1.UserNotification.belongsTo(User_1.User, {
-        as: 'user',
         foreignKey: 'user_id'
     });
     Bus_1.Bus.hasMany(Shift_1.Shift, {
-        as: 'shifts',
         foreignKey: 'bus_id'
     });
     Bus_1.Bus.hasMany(Accident_1.Accident, {
-        as: 'accidents',
         foreignKey: 'bus_id'
     });
     Shift_1.Shift.belongsTo(User_1.User, {
-        as: 'driver',
         foreignKey: 'driver_id'
     });
     Shift_1.Shift.belongsTo(Bus_1.Bus, {
-        as: 'bus',
         foreignKey: 'bus_id'
     });
     Shift_1.Shift.belongsTo(Route_1.Route, {
-        as: 'route',
         foreignKey: 'route_id'
     });
     Route_1.Route.hasMany(Shift_1.Shift, {
-        as: 'shifts',
         foreignKey: 'route_id'
     });
     Route_1.Route.hasMany(RouteSchedule_1.RouteSchedule, {
-        as: 'routeSchedules',
         foreignKey: 'route_id'
     });
     Route_1.Route.hasMany(BusRouteStation_1.BusRouteStation, {
-        as: 'busRouteStations',
         foreignKey: 'route_id'
     });
     RouteSchedule_1.RouteSchedule.belongsTo(Route_1.Route, {
-        as: 'route',
         foreignKey: 'route_id'
     });
     BusRouteStation_1.BusRouteStation.belongsTo(BusRouteStation_1.BusRouteStation, {
-        as: 'busRouteStation',
         foreignKey: 'id'
     });
     BusRouteStation_1.BusRouteStation.belongsTo(BusStation_1.BusStation, {
-        as: 'busStation',
         foreignKey: 'bus_station_id'
     });
     BusRouteStation_1.BusRouteStation.belongsTo(Route_1.Route, {
-        as: 'route',
         foreignKey: 'route_id'
     });
     BusStation_1.BusStation.hasMany(BusRouteStation_1.BusRouteStation, {
-        as: 'busRouteStations',
         foreignKey: 'bus_station_id'
     });
     ChatRoom_1.ChatRoom.hasMany(ChatRoomParticipant_1.ChatRoomParticipant, {
-        as: 'chatRoomParticipants',
         foreignKey: 'room_id'
     });
     ChatRoom_1.ChatRoom.hasMany(ChatMessage_1.ChatMessage, {
-        as: 'chatMessages',
         foreignKey: 'room_id'
     });
     ChatRoomParticipant_1.ChatRoomParticipant.belongsTo(User_1.User, {
-        as: 'user',
         foreignKey: 'participant_id'
     });
     ChatRoomParticipant_1.ChatRoomParticipant.belongsTo(ChatRoom_1.ChatRoom, {
-        as: 'chatRoom',
         foreignKey: 'room_id'
     });
     ChatMessage_1.ChatMessage.belongsTo(ChatRoom_1.ChatRoom, {
-        as: 'chatRoom',
         foreignKey: 'room_id'
     });
     ChatMessage_1.ChatMessage.belongsTo(ChatRoomParticipant_1.ChatRoomParticipant, {
-        as: 'chatRoomParticipant',
         foreignKey: 'sender_id'
     });
     ChatMessage_1.ChatMessage.hasMany(ChatMessageContent_1.ChatMessageContent, {
-        as: 'chatMessageContents',
         foreignKey: 'message_id'
     });
     ChatMessageContent_1.ChatMessageContent.belongsTo(ChatMessage_1.ChatMessage, {
-        as: 'chatMessage',
         foreignKey: 'message_id'
     });
     Accident_1.Accident.belongsTo(Bus_1.Bus, {
-        as: 'bus',
         foreignKey: 'bus_id'
     });
     Accident_1.Accident.belongsTo(User_1.User, {
-        as: 'driver',
         foreignKey: 'driver_id'
     });
     return {

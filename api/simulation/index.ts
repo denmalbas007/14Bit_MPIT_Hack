@@ -40,7 +40,7 @@ async function start_simulation(io: Server) {
         routesSim.push(newRoute)
     }
     setInterval(async ()=>{
-
+        console.log("frame update")
         for (let i = 0; i < routesSim.length; ++i) {
             routesSim[i].update()
         }

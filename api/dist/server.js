@@ -29,6 +29,8 @@ function run() {
         });
         app_1.default.set("io", io);
         const port = process.env.PORT || 3001;
+        //simulation.start_simulation(io).then(()=>{})
+        console.log("Woohoo");
         httpServer.listen(port);
     });
 }

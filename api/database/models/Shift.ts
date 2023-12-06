@@ -15,7 +15,7 @@ import type { Bus } from './Bus'
 import type { Route } from './Route'
 import type { User } from './User'
 
-type ShiftAssociations = 'driver' | 'bus' | 'route'
+type ShiftAssociations = 'user' | 'bus' | 'route'
 
 export class Shift extends Model<
     InferAttributes<Shift, {omit: ShiftAssociations}>,
@@ -30,11 +30,11 @@ export class Shift extends Model<
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
-  // Shift belongsTo User (as Driver)
-  declare driver?: NonAttribute<User>
-  declare getDriver: BelongsToGetAssociationMixin<User>
-  declare setDriver: BelongsToSetAssociationMixin<User, number>
-  declare createDriver: BelongsToCreateAssociationMixin<User>
+  // Shift belongsTo User
+  declare user?: NonAttribute<User>
+  declare getUser: BelongsToGetAssociationMixin<User>
+  declare setUser: BelongsToSetAssociationMixin<User, number>
+  declare createUser: BelongsToCreateAssociationMixin<User>
 
   // Shift belongsTo Bus
   declare bus?: NonAttribute<Bus>
@@ -49,7 +49,7 @@ export class Shift extends Model<
   declare createRoute: BelongsToCreateAssociationMixin<Route>
 
   declare static associations: {
-    driver: Association<Shift, User>,
+    user: Association<Shift, User>,
     bus: Association<Shift, Bus>,
     route: Association<Shift, Route>
   }
