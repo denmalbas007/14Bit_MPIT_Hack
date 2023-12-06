@@ -29,7 +29,12 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head>
+        <link
+          href="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.css"
+          rel="stylesheet"
+        />
+      </head>
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
@@ -38,20 +43,29 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div
-            className="relative flex flex-col h-screen bg-cover z-0"
+            className="relative flex flex-row h-screen bg-cover"
             style={{ backgroundImage: "url('/images/bg.png')" }}
           >
-            <NextLink className="flex gap-1 m-5	" href="/">
-              <Logo />
-              <img src="logo.svg" alt="TimeBus" />
-            </NextLink>
-
-            {["/map", "/schedule", "/chat", "/buses", "/health", "/report", "/statistics", "/settings", "/logout"].includes(pathname) && (
-              <nav className="fixed top-0 left-0 w-64 h-screen px-4 py-8 bg-neutral-800 -z-20">
+            {[
+              "/map",
+              "/schedule",
+              "/chat",
+              "/buses",
+              "/health",
+              "/report",
+              "/statistics",
+              "/settings",
+              "/logout",
+            ].includes(pathname) && (
+              <nav className="flex flex-col h-screen px-4 py-8 bg-neutral-800">
+                <NextLink className="inline-flex gap-1" href="/">
+                  <Logo />
+                  <img src="logo.svg" alt="TimeBus" />
+                </NextLink>
                 <Tabs
                   aria-label="Options"
                   color="primary"
-                  className="child:flex-col child:gap-3 pt-10 w-full child:w-full child:child:h-12 child:child:justify-start"
+                  className="child:flex-col child:gap-3 pt-10 w-56 child:w-56 child:child:h-12 child:child:justify-start"
                   onSelectionChange={tab}
                   selectedKey={pathname}
                 >
@@ -153,7 +167,7 @@ export default function RootLayout({
               </nav>
             )}
 
-            <main className="container mx-auto h-screen flex justify-center items-center -z-30">
+            <main className="container mx-auto h-screen flex">
               {children}
             </main>
           </div>

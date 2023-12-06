@@ -41,6 +41,7 @@
     "eslint-config-next": "14.0.2",
     "framer-motion": "^10.16.12",
     "intl-messageformat": "^10.5.0",
+    "mapbox-gl": "^3.0.0",
     "next": "14.0.2",
     "next-themes": "^0.2.1",
     "postcss": "8.4.31",
@@ -49,5 +50,8 @@
     "tailwind-variants": "^0.1.18",
     "tailwindcss": "3.3.5",
     "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "@types/mapbox-gl": "^2.7.19"
   }
 }
