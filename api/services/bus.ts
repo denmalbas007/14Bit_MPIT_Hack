@@ -100,7 +100,12 @@ async function putLocation(options) {
   bus.latitude = options.latitude;
   bus.longitude = options.longitude;
   await bus.save()
-  return bus
+  return {
+    status: 200,
+    data: {
+      bus
+    }
+  }
 }
 
 export default {

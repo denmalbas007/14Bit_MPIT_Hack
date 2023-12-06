@@ -12,6 +12,7 @@ import { ChatRoom } from './ChatRoom'
 import { ChatRoomParticipant } from './ChatRoomParticipant'
 import { ChatMessage } from './ChatMessage'
 import { ChatMessageContent } from './ChatMessageContent'
+import { Accident } from './Accident'
 
 export {
   User,
@@ -26,6 +27,7 @@ export {
   ChatRoomParticipant,
   ChatMessage,
   ChatMessageContent,
+  Accident,
   Op
 }
 
@@ -42,6 +44,7 @@ export function initModels(sequelize: Sequelize) {
   ChatRoomParticipant.initModel(sequelize)
   ChatMessage.initModel(sequelize)
   ChatMessageContent.initModel(sequelize)
+  Accident.initModel(sequelize)
 
   User.hasMany(UserNotification, {
     as: 'userNotifications',
@@ -139,6 +142,14 @@ export function initModels(sequelize: Sequelize) {
     as: 'chatMessage',
     foreignKey: 'message_id'
   })
+  Accident.belongsTo(Bus, {
+    as: 'bus',
+    foreignKey: 'bus_id'
+  })
+  Accident.belongsTo(User, {
+    as: 'user',
+    foreignKey: 'driver_id'
+  })
 
   return {
     User,
@@ -152,6 +163,7 @@ export function initModels(sequelize: Sequelize) {
     ChatRoom,
     ChatRoomParticipant,
     ChatMessage,
-    ChatMessageContent
+    ChatMessageContent,
+    Accident
   }
 }
