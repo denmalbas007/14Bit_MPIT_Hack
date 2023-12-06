@@ -6,6 +6,7 @@ import { Tabs, Tab, Chip, Card, CardBody } from "@nextui-org/react";
 
 import mapboxgl, { Map, Evented } from "mapbox-gl";
 import { useEffect, useRef, useState } from "react";
+import turf, { bearing, point } from "@turf/turf";
 
 export default function MapPage() {
   mapboxgl.accessToken =
@@ -64,32 +65,141 @@ export default function MapPage() {
       ],
     };
 
+    let counter = 0;
+    const steps = 500;
+    let running = false;
+
+    running = true;
+    // document.getElementById("replay").disabled = true;
+    let start =
+      geojson.features[0].geometry.coordinates[
+        counter >= steps ? counter - 1 : counter
+      ];
+    let end =
+      geojson.features[0].geometry.coordinates[
+        counter >= steps ? counter : counter + 1
+      ];
+    if (!start || !end) {
+      running = false;
+      // document.getElementById("replay").disabled = false;
+      return;
+    }
+
+    const bus_point = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "Point",
+            coordinates: [37.636359, 55.82253000000001],
+          },
+        },
+      ],
+    };
+
     map.on("load", () => {
-      map.addSource("line", {
+      //bus route
+      map.addSource("route", {
         type: "geojson",
         data: geojson,
       });
 
-      // add a line layer without line-dasharray defined to fill the gaps in the dashed line
       map.addLayer({
         type: "line",
-        source: "line",
-        id: "line",
+        source: "route",
+        id: "route",
         paint: {
           "line-color": "#006FEE",
           "line-width": 9,
         },
       });
 
+      // zoom
       const updateLayerStyle = (zoomLevel) => {
-        var size = zoomLevel - 6;
-        map.setPaintProperty("line", "line-width", size);
+        var size = Math.max(zoomLevel - 6, 0);
+        map.setPaintProperty("route", "line-width", size);
+
+        var size = Math.min(Math.max((zoomLevel - 14) * 0.1, 0), 0.1);
+        map.setLayoutProperty("bus", "icon-size", size);
       };
 
       map.on("zoom", function () {
         var currentZoom = map.getZoom();
         updateLayerStyle(currentZoom);
       });
+
+      //bus animation
+      let counter_2 = 0;
+      async function animate() {
+        start = geojson.features[0].geometry.coordinates[counter];
+        end =
+          geojson.features[0].geometry.coordinates[
+            counter >= 15 ? 0 : counter + 1
+          ];
+
+        bus_point.features[0].geometry.coordinates =
+          geojson.features[0].geometry.coordinates[counter];
+
+        const bus_bearing = bearing(point(start), point(end));
+
+        map.getSource("bus").setData(bus_point);
+        map.setLayoutProperty("bus", "icon-rotate", bus_bearing - 180);
+
+        if (counter < steps) {
+          requestAnimationFrame(animate);
+        }
+        counter_2 += 1;
+        if (counter_2 == 25) {
+          counter_2 = 0;
+          counter += 1;
+        }
+        if (counter === 15) counter = 0;
+      }
+
+      //bus icon
+      map.loadImage("/icons/map/bus.png", (error, image) => {
+        if (error) throw error;
+        map.addImage("bus_image", image);
+
+        map.addSource("bus", {
+          type: "geojson",
+          data: bus_point,
+        });
+
+        map.addLayer({
+          id: "bus",
+          type: "symbol",
+          source: "bus",
+          layout: {
+            "icon-image": "bus_image",
+            "icon-size": 0.1,
+          },
+        });
+
+        animate(counter);
+      });
+
+      // document.getElementById("replay").addEventListener("click", () => {
+      //   if (running) {
+      //     void 0;
+      //   } else {
+      //     // Set the coordinates of the original point back to origin
+      //     point.features[0].geometry.coordinates = origin;
+
+      //     // Update the source layer
+      //     map.getSource("point").setData(point);
+
+      //     // Reset the counter
+      //     counter = 0;
+
+      //     // Restart the animation
+      //     animate(counter);
+      //   }
+      // });
+
+      // Start the animation
     });
 
     // Clean up on unmount
