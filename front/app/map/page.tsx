@@ -30,6 +30,6 @@ export default function MapPage() {
   }, []);
 
   return (
-    <div ref={mapContainerRef} className="w-screen h-screen" />
+    <div ref={mapContainerRef} className="w-full h-full" />
   );
 }

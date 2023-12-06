@@ -167,7 +167,7 @@ export default function RootLayout({
               </nav>
             )}
 
-            <main className="container mx-auto h-screen flex">
+            <main className="container mx-auto h-screen items-center justify-center flex">
               {children}
             </main>
           </div>
