@@ -1,5 +1,3 @@
-"use client";
-
 import { Link } from "@nextui-org/link";
 import { Snippet } from "@nextui-org/snippet";
 import { Code } from "@nextui-org/code";
@@ -19,6 +17,7 @@ import {
 
 import { Inter } from "next/font/google";
 import { useRouter } from "next/navigation";
+import { Metadata } from "next";
 
 const inter = Inter({
   weight: "400", // if single weight, otherwise you use array like [400, 500, 700],
@@ -26,14 +25,24 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+export const metadata: Metadata = {
+  title: {
+    default: siteConfig.name,
+    template: `%s - ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "white" },
+    { media: "(prefers-color-scheme: dark)", color: "black" },
+  ],
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+  },
+};
+
 export default function Home() {
-  const router = useRouter();
-
-  const signup = async (e: { propertyName: string }) => {
-    if (e.propertyName === "opacity") return;
-    router.push("/signup");
-  };
-
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
       <div className="inline-block max-w-lg text-center justify-center content-center">
@@ -46,9 +55,10 @@ export default function Home() {
               </div>
             </div>
             <Button
+              href="/signup"
+              as={Link}
               variant="bordered"
               className="text-white border-white"
-              onTransitionEnd={signup}
             >
               Зарегистрироваться
             </Button>

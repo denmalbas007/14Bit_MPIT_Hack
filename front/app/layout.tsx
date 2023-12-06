@@ -1,3 +1,5 @@
+"use client";
+
 import "@/styles/globals.css";
 import { Metadata } from "next";
 import { siteConfig } from "@/config/site";
@@ -8,29 +10,23 @@ import { Link } from "@nextui-org/link";
 import clsx from "clsx";
 import NextLink from "next/link";
 import { Logo } from "@/components/logo";
-
-export const metadata: Metadata = {
-  title: {
-    default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
-  },
-};
+import { Tabs, Tab, Chip, Card, CardBody } from "@nextui-org/react";
+import { usePathname, useRouter } from "next/navigation";
+import { Url } from "next/dist/shared/lib/router/router";
+import { Key } from "react";
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const tab = async (key: Key) => {
+    router.push(key.toString());
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
@@ -42,17 +38,129 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div
-            className="relative flex flex-col h-screen bg-cover"
+            className="relative flex flex-col h-screen bg-cover z-0"
             style={{ backgroundImage: "url('/images/bg.png')" }}
           >
-            <NextLink
-              className="flex gap-1 m-5	"
-              href="/"
-            >
+            <NextLink className="flex gap-1 m-5	" href="/">
               <Logo />
               <img src="logo.svg" alt="TimeBus" />
             </NextLink>
-            <main className="container mx-auto h-screen flex justify-center items-center">
+
+            {!["/", "/signup"].includes(pathname) && (
+              <nav className="fixed top-0 left-0 w-64 h-screen px-4 py-8 bg-neutral-800 -z-20">
+                <Tabs
+                  aria-label="Options"
+                  color="primary"
+                  className="child:flex-col child:gap-3 pt-10 w-full child:w-full child:child:h-12 child:child:justify-start"
+                  onSelectionChange={tab}
+                  selectedKey={pathname}
+                >
+                  <Tab
+                    key="/map"
+                    title={
+                      <div className="flex items-center space-x-2">
+                        <img src="/icons/Map.svg" alt="Карта" />
+                        <span>Карта</span>
+                      </div>
+                    }
+                  ></Tab>
+                  <Tab
+                    key="/schedule"
+                    title={
+                      <div className="flex items-center space-x-2">
+                        <img src="/icons/Calendar_Days.svg" alt="Расписание" />
+                        <span>Расписание</span>
+                      </div>
+                    }
+                  ></Tab>
+                  <Tab
+                    key="/chat"
+                    title={
+                      <div className="flex items-center space-x-2">
+                        <img
+                          src="/icons/Chat_Circle_Dots.svg"
+                          alt="Чат с водителем"
+                        />
+                        <span>Чат с водителем</span>
+                      </div>
+                    }
+                    href="/chat"
+                  ></Tab>
+                  <Tab
+                    key="/buses"
+                    title={
+                      <div className="flex items-center space-x-2">
+                        <img
+                          src="/icons/Text_Align_Justify.svg"
+                          alt="Список автобусов"
+                        />
+                        <span>Список автобусов</span>
+                      </div>
+                    }
+                    href="/buses"
+                  ></Tab>
+                  <Tab
+                    key="/report"
+                    title={
+                      <div className="flex items-center space-x-2">
+                        <img
+                          src="/icons/Triangle_Warning.svg"
+                          alt="Реагирование"
+                        />
+                        <span>Реагирование</span>
+                      </div>
+                    }
+                    href="/report"
+                  ></Tab>
+                  <Tab
+                    key="/statistics"
+                    title={
+                      <div className="flex items-center space-x-2">
+                        <img
+                          src="/icons/Chart_Bar_Vertical_01.svg"
+                          alt="Статистика"
+                        />
+                        <span>Статистика</span>
+                      </div>
+                    }
+                    href="/statistics"
+                  ></Tab>
+                  <Tab
+                    className="mb-28"
+                    key="/health"
+                    title={
+                      <div className="flex items-center space-x-2">
+                        <img src="/icons/First_Aid.svg" alt="Здоровье" />
+                        <span>Здоровье</span>
+                      </div>
+                    }
+                    href="/health"
+                  ></Tab>
+                  <Tab
+                    key="/settings"
+                    title={
+                      <div className="flex items-center space-x-2">
+                        <img src="/icons/Settings.svg" alt="Настройки" />
+                        <span>Настройки</span>
+                      </div>
+                    }
+                    href="/settings"
+                  ></Tab>
+                  <Tab
+                    key="/logout"
+                    title={
+                      <div className="flex items-center space-x-2">
+                        <img src="/icons/Log_Out.svg" alt="Выйти" />
+                        <span>Выйти</span>
+                      </div>
+                    }
+                    href="/logout"
+                  ></Tab>
+                </Tabs>
+              </nav>
+            )}
+
+            <main className="container mx-auto h-screen flex justify-center items-center -z-30">
               {children}
             </main>
           </div>

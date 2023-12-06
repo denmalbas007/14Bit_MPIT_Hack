@@ -6,7 +6,6 @@ import { Code } from "@nextui-org/code";
 import { button as buttonStyles } from "@nextui-org/theme";
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
-import { GithubIcon } from "@/components/icons";
 import { Input, RadioGroup } from "@nextui-org/react";
 import { RolesRadio } from "../../components/roles";
 import { CheckboxGroup } from "@nextui-org/react";
@@ -66,7 +65,7 @@ export default function SignUp() {
           />
 
           <RadioGroup
-            label=""
+            label="Роль"
             description=""
             className="mb-3"
             defaultValue="passanger"
