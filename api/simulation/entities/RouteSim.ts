@@ -43,7 +43,13 @@ export class RouteSim {
             }
         }
     }
+    tick = 0
     update() {
+        this.tick += 1
+        if (this.tick >=5) {
+            this.tick = 0
+            this.startBus()
+        }
         for (let i = 0; i<this.buses.length; ++i) {
             this.buses[i].update();
         }
