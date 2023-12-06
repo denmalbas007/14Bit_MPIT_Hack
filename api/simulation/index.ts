@@ -2,9 +2,10 @@ import {Bus, BusRouteStation, BusStation, Route, Shift, User} from "../database/
 import {RouteSim} from "./entities/RouteSim";
 import {BusSim} from "./entities/BusSim";
 import {StationSim} from "./entities/StationSim";
+import { Server } from "socket.io";
 
 
-async function start_simulation() {
+async function start_simulation(io: Server) {
     const routes = await Route.findAll({
         include: [
             {
@@ -48,8 +49,12 @@ async function start_simulation() {
                 await routesSim[i].buses[j].database_update()
             }
         }
-        console.log(routesSim)
+        io.of('/').emit('simulationData',{
+            data: {
+                routesSim
+            }
+        });
     },1000);
 }
 
-export default start_simulation()
+export default {start_simulation}
