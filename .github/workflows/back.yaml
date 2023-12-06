@@ -1,0 +1,16 @@
+name: "build and start dev api server"
+
+on:
+  - push
+  - workflow_dispatch
+jobs:
+  build_and_start_push:
+    runs-on: [self-hosted, prod]
+
+    steps:
+      - run: cd /var/www/14-bit/www/mpit2023_final
+      - run: git pull origin back
+      - run: cd /var/www/14-bit/www/mpit2023_final/api
+      - run: yarn
+      - run: yarn build
+      - run: yarn start
