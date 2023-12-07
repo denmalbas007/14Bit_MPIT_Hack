@@ -7,6 +7,7 @@ async function __getRoomByUserId(options) {
 
     include: {
       model: ChatRoomParticipant,
+      as: "chatRoomParticipants",
       where: {
         userId: {
           [Op.in]: [options.fromUserId, options.toUserId]
@@ -52,7 +53,10 @@ async function getChatByUserid(options) {
     },
     order: ['createdAt','DESC'],
     limit: 10,
-    include: ChatMessageContent
+    include: [{
+      model: ChatMessageContent,
+      as: "chatMessageContents"
+    }]
   });
   return {
     status: 200,

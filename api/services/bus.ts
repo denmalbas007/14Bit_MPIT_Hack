@@ -49,6 +49,7 @@ async function getBusByBusId(options) {
     where:{
       id: options.busId
     },
+    order: [["id","ASC"]]
   })
   const nowDate = Date.now()
   const shift = await Shift.findOne({
@@ -95,7 +96,7 @@ async function putLocation(options) {
   const bus = await Bus.findOne({
     where: {
       id: options.busId
-    }
+    },
   })
   bus.latitude = options.latitude;
   bus.longitude = options.longitude;

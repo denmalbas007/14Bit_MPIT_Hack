@@ -28,6 +28,9 @@ export class BusSim {
         this.stations = stations
 
         this.orientation = orientation
+        if (!orientation) {
+            this.path_station = this.stations.length - 1;
+        }
     }
     addPassenger(passenger: PassengerSim) {
         this.passengers.push(passenger)

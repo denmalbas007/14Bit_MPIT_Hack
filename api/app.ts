@@ -8,7 +8,7 @@ import chatRoute from "./routes/chat"
 import busRoute from "./routes/bus"
 import authRoute from "./routes/auth"
 import busRouteRoute from "./routes/route"
-import statisticsRoute from "./routes/statistics"
+import intentionRoute from "./routes/intention"
 const app = express();
 
 app.use(bodyParser.json());
@@ -19,12 +19,12 @@ app.use(cors());
 /*
  * Routes
  */
-app.use('/chat', chatRoute);
-app.use('/bus_station', busStationRoute);
-app.use('/bus', busRoute);
-app.use('/route', busRouteRoute);
-app.use('/auth', authRoute);
-app.use('/statistics', statisticsRoute);
+app.use('/api/chat', chatRoute);
+app.use('/api/bus_station', busStationRoute);
+app.use('/api/bus', busRoute);
+app.use('/api/route', busRouteRoute);
+app.use('/api/auth', authRoute);
+app.use('/api/intention', intentionRoute);
 
 // catch 404
 app.use((req, res, next) => {

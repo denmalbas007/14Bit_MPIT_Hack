@@ -21,7 +21,11 @@ async function predictPassengers(routeStationId) {
         include: [{
             model: StationPassengerHistory,
             as: "stationPassengerHistories",
+<<<<<<< HEAD
             order: [["id", "ASC"]],
+=======
+            order: [["createdAt", "DESC"]],
+>>>>>>> ee8ab971cea81b3f713a335327725e85bc7e0b59
             limit: 10
         }],
 
@@ -43,7 +47,11 @@ async function predictPassengers(routeStationId) {
         }
     })
 
+<<<<<<< HEAD
     console.log(answer.data);
+=======
+    console.log("Station ",routeStationId," ",answer.data);
+>>>>>>> ee8ab971cea81b3f713a335327725e85bc7e0b59
     return answer.data.prediction
 }
 export default  {

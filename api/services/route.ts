@@ -137,9 +137,11 @@ async function getRouteByRouteId(options) {
     },
     include: [
       {
-        model: RouteSchedule
+        model: RouteSchedule,
+        as: "routeSchedules"
       },
       {
+<<<<<<< HEAD
         model: BusRouteStation
       }, {
 
@@ -147,6 +149,18 @@ async function getRouteByRouteId(options) {
         include: [
           {
             model: Bus
+=======
+        model: BusRouteStation,
+        as: "busRouteStations"
+      }, {
+
+        model: Shift,
+        as: "shifts",
+        include: [
+          {
+            model: Bus,
+            as: "bus"
+>>>>>>> ee8ab971cea81b3f713a335327725e85bc7e0b59
           }
         ]
       }

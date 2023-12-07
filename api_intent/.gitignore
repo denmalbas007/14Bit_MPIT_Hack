@@ -1,3 +1,7 @@
 venv/*
+venv-dev/*
+intentx/*
+__pycache__/*
+intent/*
 .idea/*
 intentionModel/*

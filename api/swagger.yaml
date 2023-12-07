@@ -1,7 +1,10 @@
 openapi: 3.0.3
 info:
-  title: mpit_2023_final
+  title: NeuroBus
   version: 1.0.0
+
+servers:
+  - url: https://14-bit.ru/api/
 paths:
   /accident:
     get:

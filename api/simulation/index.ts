@@ -6,8 +6,13 @@ import { Server } from "socket.io";
 import neuro  from "../services/neuro"
 
 async function start_simulation(io: Server) {
+<<<<<<< HEAD
     await neuro.predictPassengers(1);
     await neuro.predictIntention("Я хочу вызвать скорую")
+=======
+//    await neuro.predictPassengers(1);
+//    await neuro.predictIntention("Я хочу вызвать скорую")
+>>>>>>> ee8ab971cea81b3f713a335327725e85bc7e0b59
     const routes = await Route.findAll({
         include: [
             {
@@ -46,10 +51,10 @@ async function start_simulation(io: Server) {
         }
         const newRoute = new RouteSim(route.id, route.name);
         newRoute.stations = busStations;
-
+        let i = 0;
         for (const shift of route.shifts) {
-
-            const newBus = new BusSim(shift.busId,1,newRoute.stations)
+            i+=1;
+            const newBus = new BusSim(shift.busId,(i%2==0) ? 1 : 0,newRoute.stations)
             newRoute.buses.push(newBus);
         }
         routesSim.push(newRoute)
@@ -70,6 +75,8 @@ async function start_simulation(io: Server) {
                 routesSim
             }
         });
+        const buses = await Bus.findAll();
+        io.of("/").emit("buses",{buses});
     },1000);
 }
 

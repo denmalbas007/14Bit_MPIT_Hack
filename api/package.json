@@ -17,7 +17,11 @@
     "@typescript-eslint/parser": "^6.13.2",
     "@yandex-cloud/nodejs-sdk": "^2.3.0",
     "axios": "^1.6.2",
+<<<<<<< HEAD
     "bcrypt": "5.1.0",
+=======
+    "bcrypt": "^5.1.1",
+>>>>>>> ee8ab971cea81b3f713a335327725e85bc7e0b59
     "body-parser": "^1.20.0",
     "cluster": "^0.7.7",
     "compression": "^1.7.4",
@@ -40,13 +44,14 @@
     "moment": "^2.29.4",
     "multer": "1.3.0",
     "nanoid": "3",
+    "node-gyp": "^10.0.1",
     "nodemailer": "^6.7.8",
     "nodemon": "^2.0.20",
     "nominatim-client": "^3.2.1",
     "pg": "^8.8.0",
     "prettier": "2.8.8",
     "redis": "^4.5.1",
-    "sequelize": "^6.21.3",
+    "sequelize": "6.21.3",
     "sharp": "^0.31.2",
     "socket.io": "^4.5.1",
     "socket.io-redis": "^6.1.1",
