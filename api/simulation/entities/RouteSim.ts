@@ -52,7 +52,7 @@ export class RouteSim {
     bus_add_queue: number = 0
     async update() {
         this.tick += 1
-        if (this.tick % 15 == 0) {
+        if (this.tick % 5 == 0) {
             this.tick = 0
             for (let i = 0; i < this.stations.length; ++i) {
                 //let predictedPassengers =  await neuro.predictPassengers(this.stations[i].routeStationId);

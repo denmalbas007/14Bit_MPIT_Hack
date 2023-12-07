@@ -6,7 +6,7 @@ from flask import jsonify
 import sys
 
 
-from human_detection import HumanDetector
+#from human_detection import HumanDetector
 from person_prediction import Predictor
 print(f"{(sys.path[0])}/detectorModel/")
 
@@ -14,9 +14,9 @@ print(f"{(sys.path[0])}/detectorModel/")
 print(f"{sys.path[0]}/person_prediction.joblib")
 predictor = Predictor(f"{sys.path[0]}/person_prediction.joblib")
 
-detector = HumanDetector()
+#detector = HumanDetector()
 
-print("Detector initialized")
+#print("Detector initialized")
 
 app = Flask(__name__)
 
