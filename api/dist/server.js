@@ -17,6 +17,7 @@ const models_1 = require("./database/models");
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const app_1 = __importDefault(require("./app"));
+const simulation_1 = __importDefault(require("./simulation"));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         (0, models_1.initModels)(db_1.default);
@@ -29,7 +30,7 @@ function run() {
         });
         app_1.default.set("io", io);
         const port = process.env.PORT || 3001;
-        //simulation.start_simulation(io).then(()=>{})
+        simulation_1.default.start_simulation(io).then(() => { });
         console.log("Woohoo");
         httpServer.listen(port);
     });

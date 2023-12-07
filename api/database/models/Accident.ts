@@ -14,7 +14,7 @@ import {
 import type { Bus } from './Bus'
 import type { User } from './User'
 
-type AccidentAssociations = 'bus' | 'user'
+type AccidentAssociations = 'bus' | 'driver'
 
 export class Accident extends Model<
     InferAttributes<Accident, {omit: AccidentAssociations}>,
@@ -23,6 +23,7 @@ export class Accident extends Model<
     declare id: CreationOptional<number>
     declare busId: number | null
     declare driverId: number | null
+    declare accidentType: string | null
     declare createdAt: CreationOptional<Date>
     declare updatedAt: CreationOptional<Date>
 
@@ -32,15 +33,15 @@ export class Accident extends Model<
     declare setBus: BelongsToSetAssociationMixin<Bus, number>
     declare createBus: BelongsToCreateAssociationMixin<Bus>
 
-    // Accident belongsTo User
-    declare user?: NonAttribute<User>
-    declare getUser: BelongsToGetAssociationMixin<User>
-    declare setUser: BelongsToSetAssociationMixin<User, number>
-    declare createUser: BelongsToCreateAssociationMixin<User>
+    // Accident belongsTo User (as Driver)
+    declare driver?: NonAttribute<User>
+    declare getDriver: BelongsToGetAssociationMixin<User>
+    declare setDriver: BelongsToSetAssociationMixin<User, number>
+    declare createDriver: BelongsToCreateAssociationMixin<User>
 
     declare static associations: {
         bus: Association<Accident, Bus>,
-        user: Association<Accident, User>
+        driver: Association<Accident, User>
     }
 
     static initModel(sequelize: Sequelize): typeof Accident {
@@ -56,6 +57,9 @@ export class Accident extends Model<
             },
             driverId: {
                 type: DataTypes.BIGINT
+            },
+            accidentType: {
+                type: DataTypes.TEXT
             },
             createdAt: {
                 type: DataTypes.DATE
