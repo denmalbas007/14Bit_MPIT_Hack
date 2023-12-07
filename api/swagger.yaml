@@ -4,7 +4,7 @@ info:
   version: 1.0.0
 
 servers:
-  - url: https://14-bit.ru:3001/api/
+  - url: https://14-bit.ru/api/
 paths:
   /accident:
     get:

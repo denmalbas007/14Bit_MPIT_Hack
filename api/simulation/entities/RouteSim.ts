@@ -55,7 +55,8 @@ export class RouteSim {
         if (this.tick % 5 == 0) {
             this.tick = 0
             for (let i = 0; i < this.stations.length; ++i) {
-                let predictedPassengers =  await neuro.predictPassengers(this.stations[i].routeStationId);
+                //let predictedPassengers =  await neuro.predictPassengers(this.stations[i].routeStationId);
+                let predictedPassengers = 5;
                 predictedPassengers += (Math.random() >0.5 ? -1 : 1) * (Math.random() * 5)
                 predictedPassengers = Math.max(0,predictedPassengers);
                 predictedPassengers = Math.ceil(predictedPassengers)

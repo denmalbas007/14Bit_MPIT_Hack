@@ -17,7 +17,7 @@ async function run() {
   });
   app.set("io", io);
   const port = process.env.PORT || 3001;
-  //simulation.start_simulation(io).then(()=>{})
+  simulation.start_simulation(io).then(()=>{})
 
   console.log("Woohoo" )
   httpServer.listen(port);

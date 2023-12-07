@@ -6,7 +6,7 @@ import { Server } from "socket.io";
 import neuro  from "../services/neuro"
 
 async function start_simulation(io: Server) {
-    await neuro.predictPassengers(1);
+//    await neuro.predictPassengers(1);
 //    await neuro.predictIntention("Я хочу вызвать скорую")
     const routes = await Route.findAll({
         include: [
