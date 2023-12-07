@@ -19,12 +19,12 @@ app.use(cors());
 /*
  * Routes
  */
-app.use('/chat', chatRoute);
-app.use('/bus_station', busStationRoute);
-app.use('/bus', busRoute);
-app.use('/route', busRouteRoute);
-app.use('/auth', authRoute);
-app.use('/statistics', statisticsRoute);
+app.use('/api/chat', chatRoute);
+app.use('/api/bus_station', busStationRoute);
+app.use('/api/bus', busRoute);
+app.use('/api/route', busRouteRoute);
+app.use('/api/auth', authRoute);
+app.use('/api/statistics', statisticsRoute);
 
 // catch 404
 app.use((req, res, next) => {
