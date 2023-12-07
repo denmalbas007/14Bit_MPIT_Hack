@@ -10,7 +10,7 @@ jobs:
     steps:
       - run: | 
           cd /var/www/14-bit/www/mpit2023_final
-          git pull origin back
+          git pull origin main
           cd /var/www/14-bit/www/mpit2023_final/api
           yarn
           yarn build
