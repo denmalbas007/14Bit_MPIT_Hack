@@ -8,7 +8,7 @@ import chatRoute from "./routes/chat"
 import busRoute from "./routes/bus"
 import authRoute from "./routes/auth"
 import busRouteRoute from "./routes/route"
-import statisticsRoute from "./routes/statistics"
+import intentionRoute from "./routes/intention"
 const app = express();
 
 app.use(bodyParser.json());
@@ -24,7 +24,7 @@ app.use('/api/bus_station', busStationRoute);
 app.use('/api/bus', busRoute);
 app.use('/api/route', busRouteRoute);
 app.use('/api/auth', authRoute);
-app.use('/api/statistics', statisticsRoute);
+app.use('/api/intention', intentionRoute);
 
 // catch 404
 app.use((req, res, next) => {

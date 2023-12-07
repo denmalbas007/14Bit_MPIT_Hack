@@ -20,7 +20,7 @@ app.use('/bus_station', require('./routes/bus_station'));
 app.use('/bus', require('./routes/bus'));
 app.use('/route', require('./routes/route'));
 app.use('/auth', require('./routes/auth'));
-app.use('/statistics', require('./routes/statistics'));
+app.use('/statistics', require('./routes/intention'));
 // catch 404
 app.use((req, res, next) => {
     console.error(`Error 404 on ${req.url}.`);
