@@ -5,6 +5,16 @@ import {
   BelongsToCreateAssociationMixin,
   CreationOptional,
   DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
   InferCreationAttributes,
   InferAttributes,
   Model,
@@ -13,8 +23,9 @@ import {
 } from 'sequelize'
 import type { BusStation } from './BusStation'
 import type { Route } from './Route'
+import type { StationPassengerHistory } from './StationPassengerHistory'
 
-type BusRouteStationAssociations = 'busRouteStation' | 'busStation' | 'route'
+type BusRouteStationAssociations = 'busRouteStation' | 'busStation' | 'route' | 'stationPassengerHistories'
 
 export class BusRouteStation extends Model<
     InferAttributes<BusRouteStation, {omit: BusRouteStationAssociations}>,
@@ -45,10 +56,24 @@ export class BusRouteStation extends Model<
   declare setRoute: BelongsToSetAssociationMixin<Route, number>
   declare createRoute: BelongsToCreateAssociationMixin<Route>
 
+  // BusRouteStation hasMany StationPassengerHistory
+  declare stationPassengerHistories?: NonAttribute<StationPassengerHistory[]>
+  declare getStationPassengerHistories: HasManyGetAssociationsMixin<StationPassengerHistory>
+  declare setStationPassengerHistories: HasManySetAssociationsMixin<StationPassengerHistory, number>
+  declare addStationPassengerHistory: HasManyAddAssociationMixin<StationPassengerHistory, number>
+  declare addStationPassengerHistories: HasManyAddAssociationsMixin<StationPassengerHistory, number>
+  declare createStationPassengerHistory: HasManyCreateAssociationMixin<StationPassengerHistory, 'routeStationId'>
+  declare removeStationPassengerHistory: HasManyRemoveAssociationMixin<StationPassengerHistory, number>
+  declare removeStationPassengerHistories: HasManyRemoveAssociationsMixin<StationPassengerHistory, number>
+  declare hasStationPassengerHistory: HasManyHasAssociationMixin<StationPassengerHistory, number>
+  declare hasStationPassengerHistories: HasManyHasAssociationsMixin<StationPassengerHistory, number>
+  declare countStationPassengerHistories: HasManyCountAssociationsMixin
+
   declare static associations: {
     busRouteStation: Association<BusRouteStation, BusRouteStation>,
     busStation: Association<BusRouteStation, BusStation>,
-    route: Association<BusRouteStation, Route>
+    route: Association<BusRouteStation, Route>,
+    stationPassengerHistories: Association<BusRouteStation, StationPassengerHistory>
   }
 
   static initModel(sequelize: Sequelize): typeof BusRouteStation {

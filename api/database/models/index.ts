@@ -13,6 +13,8 @@ import { ChatRoomParticipant } from './ChatRoomParticipant'
 import { ChatMessage } from './ChatMessage'
 import { ChatMessageContent } from './ChatMessageContent'
 import { Accident } from './Accident'
+import { BusChargeHistory } from './BusChargeHistory'
+import { StationPassengerHistory } from './StationPassengerHistory'
 
 export {
   User,
@@ -28,6 +30,8 @@ export {
   ChatMessage,
   ChatMessageContent,
   Accident,
+  BusChargeHistory,
+  StationPassengerHistory,
   Op
 }
 
@@ -45,90 +49,136 @@ export function initModels(sequelize: Sequelize) {
   ChatMessage.initModel(sequelize)
   ChatMessageContent.initModel(sequelize)
   Accident.initModel(sequelize)
+  BusChargeHistory.initModel(sequelize)
+  StationPassengerHistory.initModel(sequelize)
 
   User.hasMany(UserNotification, {
-    foreignKey: 'user_id'
+    as: 'userNotifications',
+    foreignKey: 'userId'
   })
   User.hasMany(Shift, {
-    foreignKey: 'driver_id'
+    as: 'shifts',
+    foreignKey: 'driverId'
   })
   User.hasMany(ChatRoomParticipant, {
-    foreignKey: 'participant_id'
+    as: 'chatRoomParticipants',
+    foreignKey: 'participantId'
   })
   User.hasMany(Accident, {
-    foreignKey: 'driver_id'
+    as: 'accidents',
+    foreignKey: 'driverId'
   })
   UserNotification.belongsTo(User, {
-    foreignKey: 'user_id'
+    as: 'user',
+    foreignKey: 'userId'
   })
   Bus.hasMany(Shift, {
-    foreignKey: 'bus_id'
+    as: 'shifts',
+    foreignKey: 'busId'
   })
   Bus.hasMany(Accident, {
-    foreignKey: 'bus_id'
+    as: 'accidents',
+    foreignKey: 'busId'
+  })
+  Bus.hasMany(BusChargeHistory, {
+    as: 'busChargeHistories',
+    foreignKey: 'busId'
   })
   Shift.belongsTo(User, {
-    foreignKey: 'driver_id'
+    as: 'driver',
+    foreignKey: 'driverId'
   })
   Shift.belongsTo(Bus, {
-    foreignKey: 'bus_id'
+    as: 'bus',
+    foreignKey: 'busId'
   })
   Shift.belongsTo(Route, {
-    foreignKey: 'route_id'
+    as: 'route',
+    foreignKey: 'routeId'
   })
   Route.hasMany(Shift, {
-    foreignKey: 'route_id'
+    as: 'shifts',
+    foreignKey: 'routeId'
   })
   Route.hasMany(RouteSchedule, {
-    foreignKey: 'route_id'
+    as: 'routeSchedules',
+    foreignKey: 'routeId'
   })
   Route.hasMany(BusRouteStation, {
-    foreignKey: 'route_id'
+    as: 'busRouteStations',
+    foreignKey: 'routeId'
   })
   RouteSchedule.belongsTo(Route, {
-    foreignKey: 'route_id'
+    as: 'route',
+    foreignKey: 'routeId'
   })
   BusRouteStation.belongsTo(BusRouteStation, {
+    as: 'busRouteStation',
     foreignKey: 'id'
   })
   BusRouteStation.belongsTo(BusStation, {
-    foreignKey: 'bus_station_id'
+    as: 'busStation',
+    foreignKey: 'busStationId'
   })
   BusRouteStation.belongsTo(Route, {
-    foreignKey: 'route_id'
+    as: 'route',
+    foreignKey: 'routeId'
+  })
+  BusRouteStation.hasMany(StationPassengerHistory, {
+    as: 'stationPassengerHistories',
+    foreignKey: 'routeStationId'
   })
   BusStation.hasMany(BusRouteStation, {
-    foreignKey: 'bus_station_id'
+    as: 'busRouteStations',
+    foreignKey: 'busStationId'
   })
   ChatRoom.hasMany(ChatRoomParticipant, {
-    foreignKey: 'room_id'
+    as: 'chatRoomParticipants',
+    foreignKey: 'roomId'
   })
   ChatRoom.hasMany(ChatMessage, {
-    foreignKey: 'room_id'
+    as: 'chatMessages',
+    foreignKey: 'roomId'
   })
   ChatRoomParticipant.belongsTo(User, {
-    foreignKey: 'participant_id'
+    as: 'user',
+    foreignKey: 'participantId'
   })
   ChatRoomParticipant.belongsTo(ChatRoom, {
-    foreignKey: 'room_id'
+    as: 'chatRoom',
+    foreignKey: 'roomId'
   })
   ChatMessage.belongsTo(ChatRoom, {
-    foreignKey: 'room_id'
+    as: 'chatRoom',
+    foreignKey: 'roomId'
   })
   ChatMessage.belongsTo(ChatRoomParticipant, {
-    foreignKey: 'sender_id'
+    as: 'chatRoomParticipant',
+    foreignKey: 'senderId'
   })
   ChatMessage.hasMany(ChatMessageContent, {
-    foreignKey: 'message_id'
+    as: 'chatMessageContents',
+    foreignKey: 'messageId'
   })
   ChatMessageContent.belongsTo(ChatMessage, {
-    foreignKey: 'message_id'
+    as: 'chatMessage',
+    foreignKey: 'messageId'
   })
   Accident.belongsTo(Bus, {
-    foreignKey: 'bus_id'
+    as: 'bus',
+    foreignKey: 'busId'
   })
   Accident.belongsTo(User, {
-    foreignKey: 'driver_id'
+    as: 'driver',
+    foreignKey: 'driverId'
+  })
+  BusChargeHistory.belongsTo(Bus, {
+    as: 'bus',
+    foreignKey: 'busId'
+  })
+  StationPassengerHistory.belongsTo(BusRouteStation, {
+    as: 'busRouteStation',
+    foreignKey: 'routeStationId'
   })
 
   return {
@@ -144,6 +194,8 @@ export function initModels(sequelize: Sequelize) {
     ChatRoomParticipant,
     ChatMessage,
     ChatMessageContent,
-    Accident
+    Accident,
+    BusChargeHistory,
+    StationPassengerHistory
   }
 }

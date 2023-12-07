@@ -141,6 +141,14 @@ async function getRouteByRouteId(options) {
       },
       {
         model: BusRouteStation
+      }, {
+
+        model: Shift,
+        include: [
+          {
+            model:
+          }
+        ]
       }
     ]
   });

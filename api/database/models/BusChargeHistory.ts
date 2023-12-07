@@ -12,40 +12,32 @@ import {
     Sequelize
 } from 'sequelize'
 import type { Bus } from './Bus'
-import type { User } from './User'
 
-type AccidentAssociations = 'bus' | 'driver'
+type BusChargeHistoryAssociations = 'bus'
 
-export class Accident extends Model<
-    InferAttributes<Accident, {omit: AccidentAssociations}>,
-    InferCreationAttributes<Accident, {omit: AccidentAssociations}>
+export class BusChargeHistory extends Model<
+    InferAttributes<BusChargeHistory, {omit: BusChargeHistoryAssociations}>,
+    InferCreationAttributes<BusChargeHistory, {omit: BusChargeHistoryAssociations}>
     > {
     declare id: CreationOptional<number>
     declare busId: number | null
-    declare driverId: number | null
-    declare accidentType: string | null
+    declare charge: number | null
+    declare checkedAt: Date | null
     declare createdAt: CreationOptional<Date>
     declare updatedAt: CreationOptional<Date>
 
-    // Accident belongsTo Bus
+    // BusChargeHistory belongsTo Bus
     declare bus?: NonAttribute<Bus>
     declare getBus: BelongsToGetAssociationMixin<Bus>
     declare setBus: BelongsToSetAssociationMixin<Bus, number>
     declare createBus: BelongsToCreateAssociationMixin<Bus>
 
-    // Accident belongsTo User (as Driver)
-    declare driver?: NonAttribute<User>
-    declare getDriver: BelongsToGetAssociationMixin<User>
-    declare setDriver: BelongsToSetAssociationMixin<User, number>
-    declare createDriver: BelongsToCreateAssociationMixin<User>
-
     declare static associations: {
-        bus: Association<Accident, Bus>,
-        driver: Association<Accident, User>
+        bus: Association<BusChargeHistory, Bus>
     }
 
-    static initModel(sequelize: Sequelize): typeof Accident {
-        Accident.init({
+    static initModel(sequelize: Sequelize): typeof BusChargeHistory {
+        BusChargeHistory.init({
             id: {
                 type: DataTypes.INTEGER.UNSIGNED,
                 primaryKey: true,
@@ -55,11 +47,12 @@ export class Accident extends Model<
             busId: {
                 type: DataTypes.BIGINT
             },
-            driverId: {
-                type: DataTypes.BIGINT
+            charge: {
+                type: DataTypes.DOUBLE
             },
-            accidentType: {
-                type: DataTypes.TEXT
+            checkedAt: {
+                type: DataTypes.DATE,
+                defaultValue: DataTypes.NOW
             },
             createdAt: {
                 type: DataTypes.DATE
@@ -71,6 +64,6 @@ export class Accident extends Model<
             sequelize
         })
 
-        return Accident
+        return BusChargeHistory
     }
 }

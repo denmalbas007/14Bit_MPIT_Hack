@@ -10,19 +10,33 @@ async function start_simulation(io: Server) {
         include: [
             {
                 model: BusRouteStation,
+                as: "busRouteStations",
                 include: [
-                    BusStation
+                    {
+                        model: BusStation,
+                        as: "busStation"
+                    }
                 ]
             },
             {
             model: Shift,
+            as: "shifts",
             include: [
-                Bus,
-                User
+                {
+                    model: Bus,
+                    as: "bus"
+                },
+                {
+                    model: User,
+                    as: "driver"
+                }
             ]
         }]
     });
+    console.log(routes);
     const routesSim: Array<RouteSim> = []
+
+
     for (const route of routes) {
         const busStations: Array<StationSim> = []
         for (const routeStation of route.busRouteStations) {
@@ -39,8 +53,9 @@ async function start_simulation(io: Server) {
         }
         routesSim.push(newRoute)
     }
+
     setInterval(async ()=>{
-        console.log("frame update")
+        console.log("simulation update")
         for (let i = 0; i < routesSim.length; ++i) {
             routesSim[i].update()
         }

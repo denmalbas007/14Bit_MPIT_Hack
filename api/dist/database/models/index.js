@@ -44,88 +44,116 @@ function initModels(sequelize) {
     ChatMessageContent_1.ChatMessageContent.initModel(sequelize);
     Accident_1.Accident.initModel(sequelize);
     User_1.User.hasMany(UserNotification_1.UserNotification, {
-        foreignKey: 'user_id'
+        as: 'userNotifications',
+        foreignKey: 'userId'
     });
     User_1.User.hasMany(Shift_1.Shift, {
-        foreignKey: 'driver_id'
+        as: 'shifts',
+        foreignKey: 'driverId'
     });
     User_1.User.hasMany(ChatRoomParticipant_1.ChatRoomParticipant, {
-        foreignKey: 'participant_id'
+        as: 'chatRoomParticipants',
+        foreignKey: 'participantId'
     });
     User_1.User.hasMany(Accident_1.Accident, {
-        foreignKey: 'driver_id'
+        as: 'accidents',
+        foreignKey: 'driverId'
     });
     UserNotification_1.UserNotification.belongsTo(User_1.User, {
-        foreignKey: 'user_id'
+        as: 'user',
+        foreignKey: 'userId'
     });
     Bus_1.Bus.hasMany(Shift_1.Shift, {
-        foreignKey: 'bus_id'
+        as: 'shifts',
+        foreignKey: 'busId'
     });
     Bus_1.Bus.hasMany(Accident_1.Accident, {
-        foreignKey: 'bus_id'
+        as: 'accidents',
+        foreignKey: 'busId'
     });
     Shift_1.Shift.belongsTo(User_1.User, {
-        foreignKey: 'driver_id'
+        as: 'driver',
+        foreignKey: 'driverId'
     });
     Shift_1.Shift.belongsTo(Bus_1.Bus, {
-        foreignKey: 'bus_id'
+        as: 'bus',
+        foreignKey: 'busId'
     });
     Shift_1.Shift.belongsTo(Route_1.Route, {
-        foreignKey: 'route_id'
+        as: 'route',
+        foreignKey: 'routeId'
     });
     Route_1.Route.hasMany(Shift_1.Shift, {
-        foreignKey: 'route_id'
+        as: 'shifts',
+        foreignKey: 'routeId'
     });
     Route_1.Route.hasMany(RouteSchedule_1.RouteSchedule, {
-        foreignKey: 'route_id'
+        as: 'routeSchedules',
+        foreignKey: 'routeId'
     });
     Route_1.Route.hasMany(BusRouteStation_1.BusRouteStation, {
-        foreignKey: 'route_id'
+        as: 'busRouteStations',
+        foreignKey: 'routeId'
     });
     RouteSchedule_1.RouteSchedule.belongsTo(Route_1.Route, {
-        foreignKey: 'route_id'
+        as: 'route',
+        foreignKey: 'routeId'
     });
     BusRouteStation_1.BusRouteStation.belongsTo(BusRouteStation_1.BusRouteStation, {
+        as: 'busRouteStation',
         foreignKey: 'id'
     });
     BusRouteStation_1.BusRouteStation.belongsTo(BusStation_1.BusStation, {
-        foreignKey: 'bus_station_id'
+        as: 'busStation',
+        foreignKey: 'busStationId'
     });
     BusRouteStation_1.BusRouteStation.belongsTo(Route_1.Route, {
-        foreignKey: 'route_id'
+        as: 'route',
+        foreignKey: 'routeId'
     });
     BusStation_1.BusStation.hasMany(BusRouteStation_1.BusRouteStation, {
-        foreignKey: 'bus_station_id'
+        as: 'busRouteStations',
+        foreignKey: 'busStationId'
     });
     ChatRoom_1.ChatRoom.hasMany(ChatRoomParticipant_1.ChatRoomParticipant, {
-        foreignKey: 'room_id'
+        as: 'chatRoomParticipants',
+        foreignKey: 'roomId'
     });
     ChatRoom_1.ChatRoom.hasMany(ChatMessage_1.ChatMessage, {
-        foreignKey: 'room_id'
+        as: 'chatMessages',
+        foreignKey: 'roomId'
     });
     ChatRoomParticipant_1.ChatRoomParticipant.belongsTo(User_1.User, {
-        foreignKey: 'participant_id'
+        as: 'user',
+        foreignKey: 'participantId'
     });
     ChatRoomParticipant_1.ChatRoomParticipant.belongsTo(ChatRoom_1.ChatRoom, {
-        foreignKey: 'room_id'
+        as: 'chatRoom',
+        foreignKey: 'roomId'
     });
     ChatMessage_1.ChatMessage.belongsTo(ChatRoom_1.ChatRoom, {
-        foreignKey: 'room_id'
+        as: 'chatRoom',
+        foreignKey: 'roomId'
     });
     ChatMessage_1.ChatMessage.belongsTo(ChatRoomParticipant_1.ChatRoomParticipant, {
-        foreignKey: 'sender_id'
+        as: 'chatRoomParticipant',
+        foreignKey: 'senderId'
     });
     ChatMessage_1.ChatMessage.hasMany(ChatMessageContent_1.ChatMessageContent, {
-        foreignKey: 'message_id'
+        as: 'chatMessageContents',
+        foreignKey: 'messageId'
     });
     ChatMessageContent_1.ChatMessageContent.belongsTo(ChatMessage_1.ChatMessage, {
-        foreignKey: 'message_id'
+        as: 'chatMessage',
+        foreignKey: 'messageId'
     });
     Accident_1.Accident.belongsTo(Bus_1.Bus, {
-        foreignKey: 'bus_id'
+        as: 'bus',
+        foreignKey: 'busId'
     });
     Accident_1.Accident.belongsTo(User_1.User, {
-        foreignKey: 'driver_id'
+        as: 'driver',
+        foreignKey: 'driverId'
     });
     return {
         User: User_1.User,

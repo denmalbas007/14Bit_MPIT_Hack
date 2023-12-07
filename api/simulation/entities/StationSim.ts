@@ -4,7 +4,7 @@ export class StationSim {
     stationId
     latitude
     longitude
-    passengers: Array<PassengerSim>
+    passengers: Array<PassengerSim> = []
     constructor(stationId,latitude,longitude) {
         this.stationId = stationId
         this.latitude = latitude
