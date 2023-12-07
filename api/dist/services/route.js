@@ -152,6 +152,13 @@ function getRouteByRouteId(options) {
                 },
                 {
                     model: models_1.BusRouteStation
+                }, {
+                    model: models_1.Shift,
+                    include: [
+                        {
+                            model: models_1.Bus
+                        }
+                    ]
                 }
             ]
         });

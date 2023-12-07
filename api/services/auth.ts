@@ -2,7 +2,6 @@ import bcrypt from "bcrypt"
 import { User } from "../database/models";
 import config from "../config/auth"
 import crypto from "crypto";
-
 /**
  * @param {Object} options
  * @param {String} options.email

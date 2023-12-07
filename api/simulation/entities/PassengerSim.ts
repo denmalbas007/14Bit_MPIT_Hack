@@ -1,6 +1,6 @@
 export class PassengerSim {
-    exitStationId
-    insideBus
+    exitStationId = 0
+    insideBus = 0
     waitTime = 0
     constructor(exitStation) {
      this.exitStationId = exitStation

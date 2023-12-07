@@ -19,9 +19,10 @@ import {
   Sequelize
 } from 'sequelize'
 import type { Accident } from './Accident'
+import type { BusChargeHistory } from './BusChargeHistory'
 import type { Shift } from './Shift'
 
-type BusAssociations = 'shifts' | 'accidents'
+type BusAssociations = 'shifts' | 'accidents' | 'busChargeHistories'
 
 export class Bus extends Model<
     InferAttributes<Bus, {omit: BusAssociations}>,
@@ -65,9 +66,23 @@ export class Bus extends Model<
   declare hasAccidents: HasManyHasAssociationsMixin<Accident, number>
   declare countAccidents: HasManyCountAssociationsMixin
 
+  // Bus hasMany BusChargeHistory
+  declare busChargeHistories?: NonAttribute<BusChargeHistory[]>
+  declare getBusChargeHistories: HasManyGetAssociationsMixin<BusChargeHistory>
+  declare setBusChargeHistories: HasManySetAssociationsMixin<BusChargeHistory, number>
+  declare addBusChargeHistory: HasManyAddAssociationMixin<BusChargeHistory, number>
+  declare addBusChargeHistories: HasManyAddAssociationsMixin<BusChargeHistory, number>
+  declare createBusChargeHistory: HasManyCreateAssociationMixin<BusChargeHistory, 'busId'>
+  declare removeBusChargeHistory: HasManyRemoveAssociationMixin<BusChargeHistory, number>
+  declare removeBusChargeHistories: HasManyRemoveAssociationsMixin<BusChargeHistory, number>
+  declare hasBusChargeHistory: HasManyHasAssociationMixin<BusChargeHistory, number>
+  declare hasBusChargeHistories: HasManyHasAssociationsMixin<BusChargeHistory, number>
+  declare countBusChargeHistories: HasManyCountAssociationsMixin
+
   declare static associations: {
     shifts: Association<Bus, Shift>,
-    accidents: Association<Bus, Accident>
+    accidents: Association<Bus, Accident>,
+    busChargeHistories: Association<Bus, BusChargeHistory>
   }
 
   static initModel(sequelize: Sequelize): typeof Bus {
