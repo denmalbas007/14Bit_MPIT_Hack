@@ -85,22 +85,38 @@ export default function MapPage() {
       return;
     }
 
-    const bus_point = {
+    const buses = {
       type: "FeatureCollection",
       features: [
         {
           type: "Feature",
-          properties: {},
+          properties: {
+            hover: false,
+            click: false,
+          },
           geometry: {
             type: "Point",
             coordinates: [37.636359, 55.82253000000001],
           },
+          id: 0,
+        },
+        {
+          type: "Feature",
+          properties: {
+            hover: false,
+            click: false,
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [37.643086000000004, 55.82607500000001],
+          },
+          id: 1,
         },
       ],
     };
 
     map.on("load", () => {
-      //bus route
+      //buses routes
       map.addSource("route", {
         type: "geojson",
         data: geojson,
@@ -122,12 +138,36 @@ export default function MapPage() {
         map.setPaintProperty("route", "line-width", size);
 
         var size = Math.min(Math.max((zoomLevel - 14) * 0.1, 0), 0.1);
-        map.setLayoutProperty("bus", "icon-size", size);
+        map.setLayoutProperty("buses", "icon-size", size);
       };
 
       map.on("zoom", function () {
         var currentZoom = map.getZoom();
         updateLayerStyle(currentZoom);
+      });
+
+      map.on("click", "buses", (e) => {
+        console.log(e.features);
+      });
+
+      let hoveredId = null;
+
+      map.on("mousemove", "buses", (e) => {
+        if (e.features.length > 0) {
+          hoveredId = e.features[0].id;
+          buses.features.filter((x) => x.id === hoveredId)[0].properties.hover =
+            true;
+          map.getSource("buses").setData(buses);
+        }
+      });
+
+      map.on("mouseleave", "buses", (e) => {
+        if (hoveredId !== null) {
+          buses.features.filter((x) => x.id === hoveredId)[0].properties.hover =
+            false;
+          map.getSource("buses").setData(buses);
+        }
+        hoveredId = null;
       });
 
       //bus animation
@@ -139,13 +179,13 @@ export default function MapPage() {
             counter >= 15 ? 0 : counter + 1
           ];
 
-        bus_point.features[0].geometry.coordinates =
+        buses.features[0].geometry.coordinates =
           geojson.features[0].geometry.coordinates[counter];
 
         const bus_bearing = bearing(point(start), point(end));
 
-        map.getSource("bus").setData(bus_point);
-        map.setLayoutProperty("bus", "icon-rotate", bus_bearing - 180);
+        map.getSource("buses").setData(buses);
+        map.setLayoutProperty("buses", "icon-rotate", bus_bearing - 180);
 
         if (counter < steps) {
           requestAnimationFrame(animate);
@@ -159,26 +199,41 @@ export default function MapPage() {
       }
 
       //bus icon
-      map.loadImage("/icons/map/bus.png", (error, image) => {
+      map.loadImage("/icons/map/bus/bus.png", (error, image) => {
         if (error) throw error;
         map.addImage("bus_image", image);
+        map.loadImage("/icons/map/bus/hover.png", (error, image) => {
+          if (error) throw error;
+          map.addImage("bus_image_hover", image);
+          map.loadImage("/icons/map/bus/click.png", (error, image) => {
+            if (error) throw error;
+            map.addImage("bus_image_click", image);
 
-        map.addSource("bus", {
-          type: "geojson",
-          data: bus_point,
+            map.addSource("buses", {
+              type: "geojson",
+              data: buses,
+            });
+
+            map.addLayer({
+              id: "buses",
+              type: "symbol",
+              source: "buses",
+              layout: {
+                "icon-image": [
+                  "case",
+                  ["==", ["get", "hover"], true],
+                  "bus_image_hover",
+                  ["==", ["get", "click"], true],
+                  "bus_image_click",
+                  "bus_image",
+                ],
+                "icon-size": 0.1,
+              },
+            });
+
+            // animate(counter);
+          });
         });
-
-        map.addLayer({
-          id: "bus",
-          type: "symbol",
-          source: "bus",
-          layout: {
-            "icon-image": "bus_image",
-            "icon-size": 0.1,
-          },
-        });
-
-        animate(counter);
       });
 
       // document.getElementById("replay").addEventListener("click", () => {
