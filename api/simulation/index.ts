@@ -72,7 +72,7 @@ async function start_simulation(io: Server) {
         });
         const buses = await Bus.findAll();
         io.of("/").emit("buses",{buses});
-    },1000);
+    },500);
 }
 
 export default {start_simulation}
