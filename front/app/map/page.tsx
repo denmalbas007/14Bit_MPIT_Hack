@@ -16,6 +16,10 @@ export default function MapPage() {
 
   const mapContainerRef = useRef(null as unknown as HTMLElement);
 
+  let clickedId = null;
+
+  const [clickedIdState, setClickedIdState] = useState(false);
+
   useEffect(() => {
     // Initialize map when component mounts
     const map = new mapboxgl.Map({
@@ -150,14 +154,13 @@ export default function MapPage() {
         updateLayerStyle(currentZoom);
       });
 
-      let clickedId = null;
-
       map.on("click", "buses", (e) => {
         if (e.features.length > 0) {
           if (clickedId !== null) {
             buses.features[clickedId].properties.click = false;
           }
           clickedId = e.features[0].id;
+          setClickedIdState(true);
           buses.features[clickedId].properties.click = true;
           map.getSource("buses").setData(buses);
         }
@@ -171,6 +174,7 @@ export default function MapPage() {
             buses.features[clickedId].properties.click = false;
             map.getSource("buses").setData(buses);
             clickedId = null;
+            setClickedIdState(false);
           }
         }
       });
@@ -276,26 +280,6 @@ export default function MapPage() {
           });
         });
       });
-
-      // document.getElementById("replay").addEventListener("click", () => {
-      //   if (running) {
-      //     void 0;
-      //   } else {
-      //     // Set the coordinates of the original point back to origin
-      //     point.features[0].geometry.coordinates = origin;
-
-      //     // Update the source layer
-      //     map.getSource("point").setData(point);
-
-      //     // Reset the counter
-      //     counter = 0;
-
-      //     // Restart the animation
-      //     animate(counter);
-      //   }
-      // });
-
-      // Start the animation
     });
 
     // Clean up on unmount
@@ -304,7 +288,8 @@ export default function MapPage() {
 
   return (
     <div className="w-full h-full">
-      <Popup />
+      <Popup hidden={!clickedIdState} />
+
       <div ref={mapContainerRef} className="w-full h-full" />
     </div>
   );

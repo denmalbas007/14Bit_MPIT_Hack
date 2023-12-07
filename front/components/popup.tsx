@@ -1,5 +1,7 @@
 import React from "react";
 import { Inter } from "next/font/google";
+import { Button } from "@nextui-org/button";
+import { Avatar } from "@nextui-org/react";
 
 const inter = Inter({
   weight: "700", // if single weight, otherwise you use array like [400, 500, 700],
@@ -49,12 +51,12 @@ export const Popup = (props: { hidden?: boolean }) => {
 
           <div className="w-[475px] h-[580px] fixed z-20 top-[170px] left-[288px]">
             <div className="w-[475px] h-[580px] left-0 top-0 absolute">
-              <div className="w-[475px] h-[580px] left-0 top-0 absolute bg-neutral-800 bg-opacity-50 rounded-[30px] border border-white border-opacity-30 backdrop-blur-[6px]" />
+              <div className="w-[475px] h-[580px] left-0 top-0 absolute bg-[#1E1E2A] bg-opacity-50 rounded-[30px] border border-white border-opacity-30 backdrop-blur-[6px]" />
             </div>
             <div className="w-[215.92px] h-[41.96px] left-[36.16px] top-[31.47px] absolute text-white text-[32px] font-bold leading-[48px]">
               #A888AA777
             </div>
-            <div className="w-[185.80px] h-[41.96px] left-[36.16px] top-[271.84px] absolute text-white text-[32px] font-bold leading-[48px]">
+            <div className="w-[185.80px] h-[41.96px] left-[36.16px] top-[241.84px] absolute text-white text-[32px] font-bold leading-[48px]">
               Остановки:
             </div>
             <div className="w-[130.50px] h-[23.60px] left-[36.16px] top-[73.42px] absolute text-white text-opacity-50 text-lg font-light leading-[27px]">
@@ -64,36 +66,37 @@ export const Popup = (props: { hidden?: boolean }) => {
               89%
             </div>
             <div className="w-[32.14px] h-7 left-[346.48px] top-[50.70px] absolute justify-center items-center inline-flex">
-              <div className="w-[32.14px] h-7 relative"></div>
+              <div className="w-[32.14px] h-7 relative">
+                <img src="/icons/flash.svg"></img>
+              </div>
             </div>
             <div className="w-[394.17px] h-14 left-[36.16px] top-[159.96px] absolute">
               <div className="w-14 h-14 left-0 top-0 absolute justify-start items-start inline-flex">
-                <div className="h-14 bg-purple-700 rounded-full justify-center items-center flex">
-                  <img
-                    className="grow shrink basis-0 h-14"
-                    src="https://via.placeholder.com/56x56"
-                  />
-                </div>
+                <Avatar
+                  src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
+                  className="w-14 h-14 text-tiny"
+                />
               </div>
               <div className="w-[131.56px] h-[20.98px] left-[76.33px] top-[13.99px] absolute text-white text-base font-bold leading-normal">
                 Иван Федоров
               </div>
               <div className="w-[122px] h-8 left-[272.17px] top-[10.49px] absolute">
-                <div className="w-[122px] h-8 left-0 top-0 absolute">
-                  <div className="w-[122px] h-8 left-0 top-0 absolute justify-start items-start inline-flex">
-                    <div className="w-[122px] px-3 bg-blue-600 rounded-lg justify-center items-center gap-3 flex">
-                      <div className="w-5 h-5 justify-end items-center flex" />
-                      <div className="text-white text-sm font-medium  leading-tight">
-                        Написать
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-[20.09px] h-[17.48px] left-[12.05px] top-[5.24px] absolute" />
-                </div>
+                <Button
+                  color="primary"
+                  startContent={<img src="icons/chat.svg" />}
+                >
+                  Написать
+                </Button>
               </div>
             </div>
-            <div className="w-[392.68px] h-[178.31px] left-[38.16px] top-[334.77px] absolute">
-              <div className="w-[12px] h-[12px] left-0 top-[5.24px] absolute bg-lime-500 rounded-full" />
+            <div className="w-[392.68px] h-[190.31px] left-[38.16px] top-[305.77px] absolute">
+              <div className="absolute top-[5px]">
+                <img src="icons/route.svg" width={14}></img>
+                {/* <div className="w-[12px] h-[12px] left-0 top-[5.24px]  bg-[#60FF00] rounded-full" />
+                <div className="left-0 top-[5.24px] ">
+                  <img src="icons/green_route.svg"></img>
+                </div> */}
+              </div>
               <div className="w-[150.58px] h-[20.98px] left-[24.10px] top-0 absolute text-white text-opacity-50 text-base font-normal leading-normal">
                 Метро Окружная
               </div>
@@ -110,33 +113,35 @@ export const Popup = (props: { hidden?: boolean }) => {
                 19:58
               </div>
             </div>
-            <div className="w-[148.64px] h-[20.98px] left-[38.16px] top-[387.21px] absolute">
-              <div className="w-[12px] h-[12px] left-0 top-[5.24px] absolute bg-lime-500 rounded-full" />
+            <div className="w-[148.64px] h-[20.98px] left-[38.16px] top-[357.21px] absolute">
+              {/* <div className="w-[12px] h-[12px] left-0 top-[5.24px] absolute bg-[#60FF00] rounded-full" /> */}
               <div className="w-[150.53px] h-[20.98px] left-[24.10px] top-0 absolute text-white text-opacity-50 text-base font-normal leading-normal">
                 Улица Гагарина
               </div>
             </div>
-            <div className="w-[153.66px] h-[20.98px] left-[36.16px] top-[439.66px] absolute">
-              <div className="w-[16px] h-[16px] left-0 top-[3.50px] absolute bg-white rounded-full" />
+            <div className="w-[153.66px] h-[20.98px] left-[36.16px] top-[409.66px] absolute">
+              {/* <div className="w-[16px] h-[16px] left-0 top-[3.50px] absolute bg-white rounded-full" /> */}
               <div className="w-[127.55px] h-[20.98px] left-[26.11px] top-0 absolute text-white text-base font-bold leading-normal">
                 Улица Пушкина
               </div>
             </div>
-            <div className="w-[168.72px] h-[20.98px] left-[38.16px] top-[492.10px] absolute">
-              <div className="w-[12px] h-[12px] left-0 top-[5.24px] absolute bg-zinc-300 rounded-full" />
+            <div className="w-[168.72px] h-[20.98px] left-[38.16px] top-[462.10px] absolute">
+              {/* <div className="w-[12px] h-[12px] left-0 top-[5.24px] absolute bg-zinc-300 rounded-full" /> */}
               <div className="w-[160.62px] h-[20.98px] left-[24.10px] top-0 absolute text-white text-base font-normal leading-normal">
                 Метро Владыкино
               </div>
             </div>
-            <div className="w-[378.62px] h-[20.98px] left-[38.16px] top-[544.55px] absolute">
+            <div className="w-[378.62px] h-[20.98px] left-[38.16px] top-[514.55px] absolute">
               <div className="w-[128.55px] h-[20.98px] left-0 top-0 absolute">
-                <div className="w-[12px] h-[12px] left-0 top-[5.24px] absolute bg-zinc-300 rounded-full" />
+                {/* <div className="w-[12px] h-[12px] left-0 top-[5.24px] absolute bg-zinc-300 rounded-full" /> */}
                 <div className="w-[120.45px] h-[20.98px] left-[24.10px] top-[-0px] absolute text-white text-base font-normal leading-normal">
                   12 остановок
                 </div>
               </div>
               <div className="w-[18.08px] h-[15.73px] left-[360.54px] top-[2.62px] absolute justify-center items-center inline-flex">
-                <div className="w-[18.08px] h-[15.73px] relative"></div>
+                <div className="w-[18.08px] h-[15.73px] relative">
+                    <img src="icons/arrow-down.svg"></img>
+                </div>
               </div>
             </div>
             <div className="w-[90.32px] h-[20.98px] left-[351.51px] top-[83.91px] absolute text-white text-opacity-50 text-base font-normal leading-normal">
