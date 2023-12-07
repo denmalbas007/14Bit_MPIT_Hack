@@ -146,8 +146,17 @@ export default function MapPage() {
         updateLayerStyle(currentZoom);
       });
 
+      let clickedId = null;
+
       map.on("click", "buses", (e) => {
-        console.log(e.features);
+        if (e.features.length > 0) {
+          if (clickedId !== null) {
+            buses.features[clickedId].properties.click = false;
+          }
+          clickedId = e.features[0].id;
+          buses.features[clickedId].properties.click = true;
+          map.getSource("buses").setData(buses);
+        }
       });
 
       let hoveredId = null;
@@ -155,16 +164,14 @@ export default function MapPage() {
       map.on("mousemove", "buses", (e) => {
         if (e.features.length > 0) {
           hoveredId = e.features[0].id;
-          buses.features.filter((x) => x.id === hoveredId)[0].properties.hover =
-            true;
+          buses.features[hoveredId].properties.hover = true;
           map.getSource("buses").setData(buses);
         }
       });
 
       map.on("mouseleave", "buses", (e) => {
         if (hoveredId !== null) {
-          buses.features.filter((x) => x.id === hoveredId)[0].properties.hover =
-            false;
+          buses.features[hoveredId].properties.hover = false;
           map.getSource("buses").setData(buses);
         }
         hoveredId = null;
@@ -221,10 +228,10 @@ export default function MapPage() {
               layout: {
                 "icon-image": [
                   "case",
-                  ["==", ["get", "hover"], true],
-                  "bus_image_hover",
                   ["==", ["get", "click"], true],
                   "bus_image_click",
+                  ["==", ["get", "hover"], true],
+                  "bus_image_hover",
                   "bus_image",
                 ],
                 "icon-size": 0.1,
