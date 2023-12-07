@@ -1,5 +1,5 @@
 
-import {BusRouteStation, Route, RouteSchedule, Shift} from "../database/models";
+import {Bus, BusRouteStation, Route, RouteSchedule, Shift} from "../database/models";
 
 /**
  * @param {Object} options
@@ -146,7 +146,7 @@ async function getRouteByRouteId(options) {
         model: Shift,
         include: [
           {
-            model:
+            model: Bus
           }
         ]
       }

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.initModels = exports.Op = exports.Accident = exports.ChatMessageContent = exports.ChatMessage = exports.ChatRoomParticipant = exports.ChatRoom = exports.BusStation = exports.BusRouteStation = exports.RouteSchedule = exports.Route = exports.Shift = exports.Bus = exports.UserNotification = exports.User = void 0;
+exports.initModels = exports.Op = exports.StationPassengerHistory = exports.BusChargeHistory = exports.Accident = exports.ChatMessageContent = exports.ChatMessage = exports.ChatRoomParticipant = exports.ChatRoom = exports.BusStation = exports.BusRouteStation = exports.RouteSchedule = exports.Route = exports.Shift = exports.Bus = exports.UserNotification = exports.User = void 0;
 const sequelize_1 = require("sequelize");
 Object.defineProperty(exports, "Op", { enumerable: true, get: function () { return sequelize_1.Op; } });
 const User_1 = require("./User");
@@ -29,6 +29,10 @@ const ChatMessageContent_1 = require("./ChatMessageContent");
 Object.defineProperty(exports, "ChatMessageContent", { enumerable: true, get: function () { return ChatMessageContent_1.ChatMessageContent; } });
 const Accident_1 = require("./Accident");
 Object.defineProperty(exports, "Accident", { enumerable: true, get: function () { return Accident_1.Accident; } });
+const BusChargeHistory_1 = require("./BusChargeHistory");
+Object.defineProperty(exports, "BusChargeHistory", { enumerable: true, get: function () { return BusChargeHistory_1.BusChargeHistory; } });
+const StationPassengerHistory_1 = require("./StationPassengerHistory");
+Object.defineProperty(exports, "StationPassengerHistory", { enumerable: true, get: function () { return StationPassengerHistory_1.StationPassengerHistory; } });
 function initModels(sequelize) {
     User_1.User.initModel(sequelize);
     UserNotification_1.UserNotification.initModel(sequelize);
@@ -43,6 +47,8 @@ function initModels(sequelize) {
     ChatMessage_1.ChatMessage.initModel(sequelize);
     ChatMessageContent_1.ChatMessageContent.initModel(sequelize);
     Accident_1.Accident.initModel(sequelize);
+    BusChargeHistory_1.BusChargeHistory.initModel(sequelize);
+    StationPassengerHistory_1.StationPassengerHistory.initModel(sequelize);
     User_1.User.hasMany(UserNotification_1.UserNotification, {
         as: 'userNotifications',
         foreignKey: 'userId'
@@ -69,6 +75,10 @@ function initModels(sequelize) {
     });
     Bus_1.Bus.hasMany(Accident_1.Accident, {
         as: 'accidents',
+        foreignKey: 'busId'
+    });
+    Bus_1.Bus.hasMany(BusChargeHistory_1.BusChargeHistory, {
+        as: 'busChargeHistories',
         foreignKey: 'busId'
     });
     Shift_1.Shift.belongsTo(User_1.User, {
@@ -110,6 +120,10 @@ function initModels(sequelize) {
     BusRouteStation_1.BusRouteStation.belongsTo(Route_1.Route, {
         as: 'route',
         foreignKey: 'routeId'
+    });
+    BusRouteStation_1.BusRouteStation.hasMany(StationPassengerHistory_1.StationPassengerHistory, {
+        as: 'stationPassengerHistories',
+        foreignKey: 'routeStationId'
     });
     BusStation_1.BusStation.hasMany(BusRouteStation_1.BusRouteStation, {
         as: 'busRouteStations',
@@ -155,6 +169,14 @@ function initModels(sequelize) {
         as: 'driver',
         foreignKey: 'driverId'
     });
+    BusChargeHistory_1.BusChargeHistory.belongsTo(Bus_1.Bus, {
+        as: 'bus',
+        foreignKey: 'busId'
+    });
+    StationPassengerHistory_1.StationPassengerHistory.belongsTo(BusRouteStation_1.BusRouteStation, {
+        as: 'busRouteStation',
+        foreignKey: 'routeStationId'
+    });
     return {
         User: User_1.User,
         UserNotification: UserNotification_1.UserNotification,
@@ -168,7 +190,9 @@ function initModels(sequelize) {
         ChatRoomParticipant: ChatRoomParticipant_1.ChatRoomParticipant,
         ChatMessage: ChatMessage_1.ChatMessage,
         ChatMessageContent: ChatMessageContent_1.ChatMessageContent,
-        Accident: Accident_1.Accident
+        Accident: Accident_1.Accident,
+        BusChargeHistory: BusChargeHistory_1.BusChargeHistory,
+        StationPassengerHistory: StationPassengerHistory_1.StationPassengerHistory
     };
 }
 exports.initModels = initModels;

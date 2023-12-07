@@ -1,6 +1,9 @@
 import {BusSim} from "./BusSim"
 import {PassengerSim} from "./PassengerSim";
 import {StationSim} from "./StationSim";
+import neuro from "../../services/neuro"
+import {StationPassengerHistory} from "../../database/models";
+
 export class RouteSim {
     routeId = 0
     routeName = ""
@@ -45,29 +48,48 @@ export class RouteSim {
         }
     }
     tick = 0
-    update() {
+
+    bus_add_queue: number = 0
+    async update() {
         this.tick += 1
-        for (let i = 0; i < 10; ++ i) {
-            let indexBusStart = Math.floor(Math.random()* (this.stations.length- 1) );
-            let indexBusStop = Math.floor(Math.random()* (this.stations.length - 1))
-            if (indexBusStart === indexBusStop) {
-                indexBusStart = Math.max(0,indexBusStart - 1);
-            }
-            if (indexBusStart === indexBusStop) {
-                indexBusStop = Math.min(this.stations.length - 1, indexBusStop + 1);
-            }
-            this.stations[indexBusStart].addPassenger(new PassengerSim(this.stations[indexBusStop].stationId));
-        }
-        if (this.tick >= 5) {
+        if (this.tick % 5 == 0) {
             this.tick = 0
-            this.startBus()
+            for (let i = 0; i < this.stations.length; ++i) {
+                let predictedPassengers =  await neuro.predictPassengers(this.stations[i].routeStationId);
+                predictedPassengers += (Math.random() >0.5 ? -1 : 1) * (Math.random() * 20)
+                predictedPassengers = Math.max(0,predictedPassengers);
+                predictedPassengers = Math.ceil(predictedPassengers)
+                await StationPassengerHistory.create({
+                    routeStationId: this.stations[i].routeStationId,
+                    passengerCount: predictedPassengers
+                })
+                for (let j = 0; j < predictedPassengers; ++j) {
+                    let indexBusStop = Math.floor(Math.random()* (this.stations.length - 1))
+                    if (indexBusStop === i) {
+                        indexBusStop = Math.max(0,indexBusStop - 1);
+                    }
+                    if (indexBusStop === i) {
+                        indexBusStop = Math.min(this.stations.length - 1, indexBusStop + 1);
+                    }
+                    this.stations[i].addPassenger(new PassengerSim(this.stations[indexBusStop].stationId));
+                }
+            }
         }
-        
-        
-        
-        for (let i = 0; i<this.buses.length; ++i) {
-            this.buses[i].update();
+        let averagePassengersCount = 0;
+        if (this.tick % 10 == 0) {
+            for (const station of this.stations) {
+                averagePassengersCount += station.passengers.length
+            }
+            averagePassengersCount = averagePassengersCount / this.stations.length;
+            averagePassengersCount = Math.ceil(averagePassengersCount / 20);
+            this.bus_add_queue += averagePassengersCount
         }
+        if (this.bus_add_queue > 0) {
+            this.startBus();
+            this.bus_add_queue -= 1;
+        }
+
+
         for (let i = 0; i < this.stations.length; ++i) {
             this.stations[i].update();
 
@@ -84,13 +106,17 @@ export class RouteSim {
                         if (!this._willBusGoThroughStation(this.stations[i].stationId,passenger.exitStationId,this.buses[j].orientation)) return true
                         this.buses[j].passengers.push(passenger);
 
-                        console.log("passenger in ",this.stations[i].stationId, "wanting to go to", passenger.exitStationId,"goes to bus  ",this.buses[j])
+                        console.log("passenger in ",this.stations[i].stationId, "wanting to go to", passenger.exitStationId,"goes to bus  ",this.buses[j].busId, " with orientation ",this.buses[j].orientation )
                         return false;
                     })
                 }
 
             }
         }
+        for (let i = 0; i<this.buses.length; ++i) {
+            this.buses[i].update();
+        }
+
 
 
     }

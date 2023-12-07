@@ -3,9 +3,11 @@ import {RouteSim} from "./entities/RouteSim";
 import {BusSim} from "./entities/BusSim";
 import {StationSim} from "./entities/StationSim";
 import { Server } from "socket.io";
-
+import neuro  from "../services/neuro"
 
 async function start_simulation(io: Server) {
+    await neuro.predictPassengers(1);
+    await neuro.predictIntention("Я хочу вызвать скорую")
     const routes = await Route.findAll({
         include: [
             {
@@ -33,14 +35,13 @@ async function start_simulation(io: Server) {
             ]
         }]
     });
-    console.log(routes);
     const routesSim: Array<RouteSim> = []
 
 
     for (const route of routes) {
         const busStations: Array<StationSim> = []
         for (const routeStation of route.busRouteStations) {
-            const newStation = new StationSim(routeStation.busStationId,routeStation.busStation.latitude,routeStation.busStation.longitude)
+            const newStation = new StationSim(routeStation.busStationId,routeStation.id, routeStation.busStation.latitude,routeStation.busStation.longitude)
             busStations.push(newStation)
         }
         const newRoute = new RouteSim(route.id, route.name);
@@ -57,7 +58,7 @@ async function start_simulation(io: Server) {
     setInterval(async ()=>{
         console.log("simulation update")
         for (let i = 0; i < routesSim.length; ++i) {
-            routesSim[i].update()
+            await routesSim[i].update()
         }
         for (let i = 0; i < routesSim.length; ++i) {
             for (let j = 0; j < routesSim[i].buses.length; ++j) {

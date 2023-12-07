@@ -1,6 +1,6 @@
 import {PassengerSim} from "./PassengerSim";
 import {StationSim} from "./StationSim";
-import {Bus} from "../../database/models";
+import {Bus, BusChargeHistory} from "../../database/models";
 
 export class BusSim {
     orientation = 0
@@ -16,6 +16,8 @@ export class BusSim {
     passengers: Array<PassengerSim> = []
     stations: Array<StationSim> = []
     capacity = 100
+    charge = 100
+    is_charging = 0
     busId = 0
     latitude = 0
     longitude = 0
@@ -38,7 +40,22 @@ export class BusSim {
             this.restTimeElapsed += 1
             return;
         }
+        this.charge = Math.max(0,this.charge - (this.stopActiveId === -1 ? 2 : 1))
+        if (this.path_step <= 1  && (this.path_station === 0 || this.path_station === this.stations.length - 1)) {
 
+            if (this.is_charging === 1) {
+                this.charge = Math.min(this.charge + 5, 100);
+                if (this.charge === 100) this.is_charging = 0;
+                return
+            } else {
+                if (this.charge < 40) {
+                    this.is_charging = 1;
+                    return
+                } else {
+                    this.is_charging = 0;
+                }
+            }
+        }
 
 
         if (this.path_step >= this.timeBetweenStops) {
@@ -107,6 +124,12 @@ export class BusSim {
         busObject.latitude = this.latitude;
         busObject.longitude = this.longitude;
         busObject.passengerCount = this.passengers.length;
+        busObject.levelOfCharge = this.charge;
         await busObject.save()
+
+        await BusChargeHistory.create({
+            busId: this.busId,
+            charge: this.charge
+        });
     }
 }
