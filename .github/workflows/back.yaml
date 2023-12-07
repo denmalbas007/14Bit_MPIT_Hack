@@ -1,0 +1,17 @@
+name: "build and start dev api server"
+# sorry god for making too much commits on dev branch
+on:
+  - push
+  - workflow_dispatch
+jobs:
+  build_and_start_push:
+    runs-on: [self-hosted, prod]
+
+    steps:
+      - run: | 
+          cd /var/www/14-bit/www/mpit2023_final
+          git pull origin back
+          cd /var/www/14-bit/www/mpit2023_final/api
+          yarn
+          yarn build
+          pm2 restart dist/server.js

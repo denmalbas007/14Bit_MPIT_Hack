@@ -1,0 +1,147 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.initModels = exports.Op = exports.Accident = exports.ChatMessageContent = exports.ChatMessage = exports.ChatRoomParticipant = exports.ChatRoom = exports.BusStation = exports.BusRouteStation = exports.RouteSchedule = exports.Route = exports.Shift = exports.Bus = exports.UserNotification = exports.User = void 0;
+const sequelize_1 = require("sequelize");
+Object.defineProperty(exports, "Op", { enumerable: true, get: function () { return sequelize_1.Op; } });
+const User_1 = require("./User");
+Object.defineProperty(exports, "User", { enumerable: true, get: function () { return User_1.User; } });
+const UserNotification_1 = require("./UserNotification");
+Object.defineProperty(exports, "UserNotification", { enumerable: true, get: function () { return UserNotification_1.UserNotification; } });
+const Bus_1 = require("./Bus");
+Object.defineProperty(exports, "Bus", { enumerable: true, get: function () { return Bus_1.Bus; } });
+const Shift_1 = require("./Shift");
+Object.defineProperty(exports, "Shift", { enumerable: true, get: function () { return Shift_1.Shift; } });
+const Route_1 = require("./Route");
+Object.defineProperty(exports, "Route", { enumerable: true, get: function () { return Route_1.Route; } });
+const RouteSchedule_1 = require("./RouteSchedule");
+Object.defineProperty(exports, "RouteSchedule", { enumerable: true, get: function () { return RouteSchedule_1.RouteSchedule; } });
+const BusRouteStation_1 = require("./BusRouteStation");
+Object.defineProperty(exports, "BusRouteStation", { enumerable: true, get: function () { return BusRouteStation_1.BusRouteStation; } });
+const BusStation_1 = require("./BusStation");
+Object.defineProperty(exports, "BusStation", { enumerable: true, get: function () { return BusStation_1.BusStation; } });
+const ChatRoom_1 = require("./ChatRoom");
+Object.defineProperty(exports, "ChatRoom", { enumerable: true, get: function () { return ChatRoom_1.ChatRoom; } });
+const ChatRoomParticipant_1 = require("./ChatRoomParticipant");
+Object.defineProperty(exports, "ChatRoomParticipant", { enumerable: true, get: function () { return ChatRoomParticipant_1.ChatRoomParticipant; } });
+const ChatMessage_1 = require("./ChatMessage");
+Object.defineProperty(exports, "ChatMessage", { enumerable: true, get: function () { return ChatMessage_1.ChatMessage; } });
+const ChatMessageContent_1 = require("./ChatMessageContent");
+Object.defineProperty(exports, "ChatMessageContent", { enumerable: true, get: function () { return ChatMessageContent_1.ChatMessageContent; } });
+const Accident_1 = require("./Accident");
+Object.defineProperty(exports, "Accident", { enumerable: true, get: function () { return Accident_1.Accident; } });
+function initModels(sequelize) {
+    User_1.User.initModel(sequelize);
+    UserNotification_1.UserNotification.initModel(sequelize);
+    Bus_1.Bus.initModel(sequelize);
+    Shift_1.Shift.initModel(sequelize);
+    Route_1.Route.initModel(sequelize);
+    RouteSchedule_1.RouteSchedule.initModel(sequelize);
+    BusRouteStation_1.BusRouteStation.initModel(sequelize);
+    BusStation_1.BusStation.initModel(sequelize);
+    ChatRoom_1.ChatRoom.initModel(sequelize);
+    ChatRoomParticipant_1.ChatRoomParticipant.initModel(sequelize);
+    ChatMessage_1.ChatMessage.initModel(sequelize);
+    ChatMessageContent_1.ChatMessageContent.initModel(sequelize);
+    Accident_1.Accident.initModel(sequelize);
+    User_1.User.hasMany(UserNotification_1.UserNotification, {
+        foreignKey: 'user_id'
+    });
+    User_1.User.hasMany(Shift_1.Shift, {
+        foreignKey: 'driver_id'
+    });
+    User_1.User.hasMany(ChatRoomParticipant_1.ChatRoomParticipant, {
+        foreignKey: 'participant_id'
+    });
+    User_1.User.hasMany(Accident_1.Accident, {
+        foreignKey: 'driver_id'
+    });
+    UserNotification_1.UserNotification.belongsTo(User_1.User, {
+        foreignKey: 'user_id'
+    });
+    Bus_1.Bus.hasMany(Shift_1.Shift, {
+        foreignKey: 'bus_id'
+    });
+    Bus_1.Bus.hasMany(Accident_1.Accident, {
+        foreignKey: 'bus_id'
+    });
+    Shift_1.Shift.belongsTo(User_1.User, {
+        foreignKey: 'driver_id'
+    });
+    Shift_1.Shift.belongsTo(Bus_1.Bus, {
+        foreignKey: 'bus_id'
+    });
+    Shift_1.Shift.belongsTo(Route_1.Route, {
+        foreignKey: 'route_id'
+    });
+    Route_1.Route.hasMany(Shift_1.Shift, {
+        foreignKey: 'route_id'
+    });
+    Route_1.Route.hasMany(RouteSchedule_1.RouteSchedule, {
+        foreignKey: 'route_id'
+    });
+    Route_1.Route.hasMany(BusRouteStation_1.BusRouteStation, {
+        foreignKey: 'route_id'
+    });
+    RouteSchedule_1.RouteSchedule.belongsTo(Route_1.Route, {
+        foreignKey: 'route_id'
+    });
+    BusRouteStation_1.BusRouteStation.belongsTo(BusRouteStation_1.BusRouteStation, {
+        foreignKey: 'id'
+    });
+    BusRouteStation_1.BusRouteStation.belongsTo(BusStation_1.BusStation, {
+        foreignKey: 'bus_station_id'
+    });
+    BusRouteStation_1.BusRouteStation.belongsTo(Route_1.Route, {
+        foreignKey: 'route_id'
+    });
+    BusStation_1.BusStation.hasMany(BusRouteStation_1.BusRouteStation, {
+        foreignKey: 'bus_station_id'
+    });
+    ChatRoom_1.ChatRoom.hasMany(ChatRoomParticipant_1.ChatRoomParticipant, {
+        foreignKey: 'room_id'
+    });
+    ChatRoom_1.ChatRoom.hasMany(ChatMessage_1.ChatMessage, {
+        foreignKey: 'room_id'
+    });
+    ChatRoomParticipant_1.ChatRoomParticipant.belongsTo(User_1.User, {
+        foreignKey: 'participant_id'
+    });
+    ChatRoomParticipant_1.ChatRoomParticipant.belongsTo(ChatRoom_1.ChatRoom, {
+        foreignKey: 'room_id'
+    });
+    ChatMessage_1.ChatMessage.belongsTo(ChatRoom_1.ChatRoom, {
+        foreignKey: 'room_id'
+    });
+    ChatMessage_1.ChatMessage.belongsTo(ChatRoomParticipant_1.ChatRoomParticipant, {
+        foreignKey: 'sender_id'
+    });
+    ChatMessage_1.ChatMessage.hasMany(ChatMessageContent_1.ChatMessageContent, {
+        foreignKey: 'message_id'
+    });
+    ChatMessageContent_1.ChatMessageContent.belongsTo(ChatMessage_1.ChatMessage, {
+        foreignKey: 'message_id'
+    });
+    Accident_1.Accident.belongsTo(Bus_1.Bus, {
+        foreignKey: 'bus_id'
+    });
+    Accident_1.Accident.belongsTo(User_1.User, {
+        foreignKey: 'driver_id'
+    });
+    return {
+        User: User_1.User,
+        UserNotification: UserNotification_1.UserNotification,
+        Bus: Bus_1.Bus,
+        Shift: Shift_1.Shift,
+        Route: Route_1.Route,
+        RouteSchedule: RouteSchedule_1.RouteSchedule,
+        BusRouteStation: BusRouteStation_1.BusRouteStation,
+        BusStation: BusStation_1.BusStation,
+        ChatRoom: ChatRoom_1.ChatRoom,
+        ChatRoomParticipant: ChatRoomParticipant_1.ChatRoomParticipant,
+        ChatMessage: ChatMessage_1.ChatMessage,
+        ChatMessageContent: ChatMessageContent_1.ChatMessageContent,
+        Accident: Accident_1.Accident
+    };
+}
+exports.initModels = initModels;
+//# sourceMappingURL=index.js.map
