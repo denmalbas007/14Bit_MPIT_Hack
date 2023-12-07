@@ -7,8 +7,8 @@ export class BusSim {
     has_started = "waiting"
 
     restTimeElapsed = 0
-    timeBetweenStops = 2
-    timeForStop = 2
+    timeBetweenStops = 50
+    timeForStop = 15
     stopTimeElapsed = 0
     stopActiveId = -1
     path_step = 0
