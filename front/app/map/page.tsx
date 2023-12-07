@@ -304,7 +304,7 @@ export default function MapPage() {
 
   return (
     <div className="w-full h-full">
-      {/* <Popup hidden /> */}
+      <Popup />
       <div ref={mapContainerRef} className="w-full h-full" />
     </div>
   );
