@@ -57,9 +57,8 @@ export default function RootLayout({
               "/settings",
               "/logout",
             ].includes(pathname) && (
-              <nav className="flex flex-col h-screen px-4 py-8 bg-neutral-800">
-                <NextLink className="inline-flex gap-1" href="/">
-                  <Logo />
+              <nav className="flex flex-col h-screen px-4 py-5 bg-neutral-800">
+                <NextLink className="inline-flex m-1" href="/">
                   <img src="logo.svg" alt="TimeBus" />
                 </NextLink>
                 <Tabs

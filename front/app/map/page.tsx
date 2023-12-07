@@ -66,7 +66,7 @@ export default function MapPage() {
     };
 
     let counter = 0;
-    const steps = 500;
+    const steps = route.length;
     let running = false;
 
     running = true;
@@ -93,6 +93,7 @@ export default function MapPage() {
           properties: {
             hover: false,
             click: false,
+            id: 0,
           },
           geometry: {
             type: "Point",
@@ -105,6 +106,7 @@ export default function MapPage() {
           properties: {
             hover: false,
             click: false,
+            id: 1,
           },
           geometry: {
             type: "Point",
@@ -178,31 +180,51 @@ export default function MapPage() {
       });
 
       //bus animation
-      let counter_2 = 0;
+      const stops = buses.features.map((bus) => {
+        return [bus.id, 0];
+      });
+
       async function animate() {
-        start = geojson.features[0].geometry.coordinates[counter];
-        end =
+        const id = 0;
+
+        if (counter === steps - 1) {
+          counter = 0;
+        }
+
+        start =
           geojson.features[0].geometry.coordinates[
-            counter >= 15 ? 0 : counter + 1
+            counter >= steps ? counter - 1 : counter
           ];
 
-        buses.features[0].geometry.coordinates =
+        end =
+          geojson.features[0].geometry.coordinates[
+            counter >= steps ? counter : counter + 1
+          ];
+
+        buses.features[id].geometry.coordinates =
           geojson.features[0].geometry.coordinates[counter];
 
         const bus_bearing = bearing(point(start), point(end));
 
         map.getSource("buses").setData(buses);
-        map.setLayoutProperty("buses", "icon-rotate", bus_bearing - 180);
+        // map.setLayoutProperty(
+        //   { source: "buses", id: id },
+        //   "icon-rotate",
+        //   bus_bearing - 180
+        // );
+        stops[id][1] = bus_bearing - 180;
+        map.setLayoutProperty("buses", "icon-rotate", {
+          property: "id",
+          type: "categorical",
+          stops: stops,
+          default: 0,
+        });
 
         if (counter < steps) {
           requestAnimationFrame(animate);
         }
-        counter_2 += 1;
-        if (counter_2 == 25) {
-          counter_2 = 0;
-          counter += 1;
-        }
-        if (counter === 15) counter = 0;
+
+        counter = counter + 1;
       }
 
       //bus icon
@@ -238,7 +260,7 @@ export default function MapPage() {
               },
             });
 
-            // animate(counter);
+            animate();
           });
         });
       });
