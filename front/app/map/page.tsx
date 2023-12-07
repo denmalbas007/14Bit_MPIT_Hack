@@ -20,6 +20,38 @@ export default function MapPage() {
 
   const [clickedIdState, setClickedIdState] = useState(false);
 
+  let buses = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        properties: {
+          hover: false,
+          click: false,
+          id: 0,
+        },
+        geometry: {
+          type: "Point",
+          coordinates: [37.636359, 55.82253000000001],
+        },
+        id: 0,
+      },
+      {
+        type: "Feature",
+        properties: {
+          hover: false,
+          click: false,
+          id: 1,
+        },
+        geometry: {
+          type: "Point",
+          coordinates: [37.643086000000004, 55.82607500000001],
+        },
+        id: 1,
+      },
+    ],
+  };
+
   useEffect(() => {
     // Initialize map when component mounts
     const map = new mapboxgl.Map({
@@ -90,38 +122,6 @@ export default function MapPage() {
       // document.getElementById("replay").disabled = false;
       return;
     }
-
-    const buses = {
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          properties: {
-            hover: false,
-            click: false,
-            id: 0,
-          },
-          geometry: {
-            type: "Point",
-            coordinates: [37.636359, 55.82253000000001],
-          },
-          id: 0,
-        },
-        {
-          type: "Feature",
-          properties: {
-            hover: false,
-            click: false,
-            id: 1,
-          },
-          geometry: {
-            type: "Point",
-            coordinates: [37.643086000000004, 55.82607500000001],
-          },
-          id: 1,
-        },
-      ],
-    };
 
     map.on("load", () => {
       //buses routes
@@ -196,9 +196,9 @@ export default function MapPage() {
       });
 
       //bus animation
-      const stops = buses.features.map((bus) => {
-        return [bus.id, 0];
-      });
+      // const stops = buses.features.map((bus) => {
+      //   return [bus.id, 0];
+      // });
 
       async function animate() {
         const id = 0;
@@ -280,6 +280,42 @@ export default function MapPage() {
           });
         });
       });
+
+      const updateBuses = async () => {
+        const buses_back = await (
+          await fetch("https://14-bit.ru/api/bus")
+        ).json();
+
+        const buses_features = buses_back.buses.map((bus) => {
+          return {
+            type: "Feature",
+            properties: {
+              hover: false,
+              click: false,
+              id: bus.id,
+            },
+            geometry: {
+              type: "Point",
+              coordinates: [bus.longitude, bus.latitude],
+            },
+            id: bus.id,
+          };
+        });
+
+        const buses = {
+          type: "FeatureCollection",
+          features: buses_features,
+        };
+
+        return buses;
+      };
+
+      setInterval(async () => {
+        const b = await updateBuses();
+        map.getSource("buses").setData(b);
+        console.log(map.getSource("buses"));
+        buses = b;
+      }, 1000);
     });
 
     // Clean up on unmount
