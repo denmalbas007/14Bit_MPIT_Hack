@@ -30,7 +30,9 @@ async function postBus(options) {
  */
 
 async function getBuses(options) {
-  const buses = await Bus.findAll({})
+  const buses = await Bus.findAll({
+    order: [["id","ASC"]]
+  })
   return {
     status: 200,
     data: {
@@ -49,7 +51,6 @@ async function getBusByBusId(options) {
     where:{
       id: options.busId
     },
-    order: [["id","ASC"]]
   })
   const nowDate = Date.now()
   const shift = await Shift.findOne({
