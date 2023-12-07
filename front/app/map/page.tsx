@@ -8,6 +8,8 @@ import mapboxgl, { Map, Evented } from "mapbox-gl";
 import { useEffect, useRef, useState } from "react";
 import turf, { bearing, point } from "@turf/turf";
 
+import { Popup } from "@/components/popup";
+
 export default function MapPage() {
   mapboxgl.accessToken =
     "pk.eyJ1IjoiYnlrb3YxNCIsImEiOiJjbHBzYm1kN3owMXlvMm1vOTh0M3p0MHJyIn0.gSDEL3B4-UohUBnJqsgrbA";
@@ -163,6 +165,16 @@ export default function MapPage() {
 
       let hoveredId = null;
 
+      map.on("click", (e) => {
+        if (hoveredId === null) {
+          if (clickedId !== null) {
+            buses.features[clickedId].properties.click = false;
+            map.getSource("buses").setData(buses);
+            clickedId = null;
+          }
+        }
+      });
+
       map.on("mousemove", "buses", (e) => {
         if (e.features.length > 0) {
           hoveredId = e.features[0].id;
@@ -260,7 +272,7 @@ export default function MapPage() {
               },
             });
 
-            animate();
+            // animate();
           });
         });
       });
@@ -290,5 +302,10 @@ export default function MapPage() {
     return () => map.remove();
   }, []);
 
-  return <div ref={mapContainerRef} className="w-full h-full" />;
+  return (
+    <div className="w-full h-full">
+      {/* <Popup hidden /> */}
+      <div ref={mapContainerRef} className="w-full h-full" />
+    </div>
+  );
 }

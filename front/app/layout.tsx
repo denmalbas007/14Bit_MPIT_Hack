@@ -37,13 +37,13 @@ export default function RootLayout({
       </head>
       <body
         className={clsx(
-          "min-h-screen bg-background font-sans antialiased",
+          "bg-background font-sans antialiased",
           fontSans.variable
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div
-            className="relative flex flex-row h-screen bg-cover"
+            className="relative flex flex-row h-screen justify-stretch items-stretch bg-cover"
             style={{ backgroundImage: "url('/images/bg.png')" }}
           >
             {[
@@ -57,7 +57,7 @@ export default function RootLayout({
               "/settings",
               "/logout",
             ].includes(pathname) && (
-              <nav className="flex flex-col h-screen px-4 py-5 bg-neutral-800">
+              <nav className="flex flex-col h-full px-4 py-5 bg-neutral-800">
                 <NextLink className="inline-flex m-1" href="/">
                   <img src="logo.svg" alt="TimeBus" />
                 </NextLink>
@@ -165,10 +165,16 @@ export default function RootLayout({
                 </Tabs>
               </nav>
             )}
+            <div className="flex flex-col grow">
+              <div className="flex flew-row h-[76px] bg-[#1E1E2A]">
+                <div className="flex bg-[#1E1E2A]">Test</div>
+                <div className="flex bg-[#1E1E2A]">Test</div>
+              </div>
 
-            <main className="container mx-auto h-screen items-center justify-center flex">
-              {children}
-            </main>
+              <div className="grow items-center justify-center">
+                {children}
+              </div>
+            </div>
           </div>
         </Providers>
       </body>
