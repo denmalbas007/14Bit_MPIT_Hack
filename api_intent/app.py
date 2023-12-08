@@ -16,6 +16,8 @@ app = Flask(__name__)
 
 @app.route('/intention',methods=['POST'])
 def intention_predict():
+    print(request.json)
+    print(request.data)
     prompt = request.json['prompt']
     return jsonify({'intentions': intention_predictor.get_response(prompt)})
 
