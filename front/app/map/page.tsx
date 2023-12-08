@@ -15,68 +15,52 @@ export default function MapPage() {
   mapboxgl.accessToken =
     "pk.eyJ1IjoiYnlrb3YxNCIsImEiOiJjbHBzYm1kN3owMXlvMm1vOTh0M3p0MHJyIn0.gSDEL3B4-UohUBnJqsgrbA";
   let map;
-  let clickedId = useRef(null);
-  let setClickedId = (value) => {
-    if (value === null && clickedId.current !== null) {
-      console.log("oooh",clickedId)
-      map.getSource("buses").setData(buses);
-    }
-    clickedId.current = value;
-  }
+  let [clickedId, setClickedId] = useState(null);
 
-  let clickedIdState = false;
-  const [clickedIdStateD,setClickedIdStateD] = useState(false)
+  let [clickedIdState, setClickedIdState] = useState(false);
 
-  function setClickedIdState(value) {
-    console.log("WHY")
-    setClickedIdStateD(true)
-    setClickedIdStateD(value)
-    clickedIdState = value;
-  }
   let haveFired = false;
   let hoveredId = null;
   const mapContainerRef = useRef(null as unknown as HTMLElement);
-  let buses = {
-    type: "FeatureCollection",
-    features: [
-      {
-        type: "Feature",
-        properties: {
-          hover: false,
-          click: false,
-          id: 0,
-        },
-        geometry: {
-          type: "Point",
-          coordinates: [37.636359, 55.82253000000001],
-        },
-        id: 0,
-        indexInArray: 0,
-      },
-      {
-        type: "Feature",
-        properties: {
-          hover: false,
-          click: false,
-          id: 1,
-        },
-        geometry: {
-          type: "Point",
-          coordinates: [37.643086000000004, 55.82607500000001],
-        },
-        id: 1,
-        indexInArray: 1
-      },
-    ],
-  };
+  let buses = {features: []};
   let busStations = {
     type: "FeatureCollection",
     features: []
   };
+  let [have_inited, setInited] = useState(false);
   const init = async () => {
 
+
+    if (have_inited) return;
+    console.log("init");
+    const updateBuses = async () => {
+      const buses_back = await (
+          await fetch("https://14-bit.ru/api/bus")
+      ).json();
+
+      let buses_features = buses_back.buses.map((bus) => {
+        return {
+          type: "Feature",
+          properties: {
+            hover: (buses?.features[parseInt(bus.id)]?.properties?.click ),
+            click: (buses?.features[parseInt(bus.id)]?.properties?.hover),
+            id: bus.id,
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [bus.latitude, bus.longitude],
+          },
+          id: bus.id,
+        };
+      });
+      return {
+        type: "FeatureCollection",
+        features: buses_features,
+      };
+    };
+    buses = await updateBuses();
+    setInited(true);
     let busStationsBack = await ((await fetch("https://14-bit.ru/api/bus_station")).json());
-    console.log(busStationsBack);
     busStations.features = [];
     for (let busStation of busStationsBack.busStations) {
       busStations.features.push({
@@ -91,10 +75,9 @@ export default function MapPage() {
           coordinates: [busStation.longitude, busStation.latitude],
         },
         id: 0,
-        indexInArray: busStations.features.length
       })
     }
-      map =new mapboxgl.Map({
+      map = new mapboxgl.Map({
         container: mapContainerRef.current,
         style: "mapbox://styles/mapbox/dark-v11",
         center: [37.644401, 55.823165], // starting position [lng, lat]
@@ -214,7 +197,6 @@ export default function MapPage() {
           type: "geojson",
           data: geojson,
         });
-
         map.addLayer({
           type: "line",
           source: "route",
@@ -242,8 +224,8 @@ export default function MapPage() {
         map.on("click", "buses", (e) => {
 
           if (e.features.length > 0) {
-            if (clickedId.current !== null) {
-              buses.features[clickedId.current].properties.click = false;
+            if (clickedId !== null) {
+              buses.features[clickedId].properties.click = false;
             }
             setClickedId(e.features[0].id);
             setClickedIdState(true);
@@ -252,13 +234,11 @@ export default function MapPage() {
           }
         });
 
-
-
         map.on("click", (e) => {
-          console.log("CLICKING MAP",hoveredId,clickedId.current)
+          console.log("wtf bitch")
           if (hoveredId === null) {
-            if (clickedId.current !== null) {
-              buses.features[clickedId.current].properties.click = false;
+            if (clickedId !== null) {
+              buses.features[clickedId].properties.click = false;
               map.getSource("buses").setData(buses);
               setClickedId(null);
               setClickedIdState(false);
@@ -281,11 +261,6 @@ export default function MapPage() {
           }
           hoveredId = null;
         });
-
-        //bus animation
-        // const stops = buses.features.map((bus) => {
-        //   return [bus.id, 0];
-        // });
 
         async function animate() {
           const id = 0;
@@ -310,11 +285,6 @@ export default function MapPage() {
           const bus_bearing = bearing(point(start), point(end));
 
           map.getSource("buses").setData(buses);
-          // map.setLayoutProperty(
-          //   { source: "buses", id: id },
-          //   "icon-rotate",
-          //   bus_bearing - 180
-          // );
           stops[id][1] = bus_bearing - 180;
           map.setLayoutProperty("buses", "icon-rotate", {
             property: "id",
@@ -386,40 +356,11 @@ export default function MapPage() {
           });
         });
 
-        const updateBuses = async () => {
-          const buses_back = await (
-              await fetch("https://14-bit.ru/api/bus")
-          ).json();
-          console.log(buses_back)
 
-          const buses_features = buses_back.buses.map((bus) => {
-            return {
-              type: "Feature",
-              properties: {
-                hover: false,
-                click: false,
-                id: bus.id,
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [bus.latitude, bus.longitude],
-              },
-              id: bus.id,
-            };
-          });
-
-          const buses = {
-            type: "FeatureCollection",
-            features: buses_features,
-          };
-
-          return buses;
-        };
 
         setInterval(async () => {
           const b = await updateBuses();
           map.getSource("buses").setData(b);
-          console.log(map.getSource("buses"));
           buses = b;
         }, 500);
   });
@@ -430,7 +371,7 @@ export default function MapPage() {
 
   return (
     <div className="w-full h-full">
-      <RoutePopup onBackClick={()=>{console.log('what'); setClickedId(null); setClickedIdState(false)}} hidden={!clickedIdStateD}></RoutePopup>
+      <RoutePopup onBackClick={()=>{setClickedIdState(false)}} hidden={!clickedIdState}></RoutePopup>
       <div ref={mapContainerRef} className="w-full h-full" />
     </div>
   );
