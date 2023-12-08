@@ -52,6 +52,7 @@ async function start_simulation(io: Server) {
             const newStation = new StationSim(routeStation.busStationId,routeStation.id, routeStation.busStation.latitude,routeStation.busStation.longitude)
             busStations.push(newStation)
         }
+        console.log("ooo buses",busStations);
         const newRoute = new RouteSim(route.id, route.name);
         newRoute.stations = busStations;
         let i = 0;
