@@ -77,6 +77,7 @@ async function start_simulation(io: Server) {
                 routesSim
             }
         });
+        console.log("update sim");
         const buses = await Bus.findAll();
         io.of("/").emit("buses",{buses});
     },500);
