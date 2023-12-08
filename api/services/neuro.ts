@@ -5,7 +5,7 @@ import {BusRouteStation, StationPassengerHistory} from "../database/models";
 async function predictIntention(prompt) {
     const answer = await axios("/intention",{
         baseURL: "http://localhost:6969",
-        method: "POST",
+        method: "GET",
         data: {
             prompt
         }
