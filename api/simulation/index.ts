@@ -42,7 +42,9 @@ async function start_simulation(io: Server) {
     for (const route of routes) {
         const path: Array<PathPointSim> = []
         for (const pathPoint of route.path["points"]) {
-            path.push(new PathPointSim(pathPoint.stationId,pathPoint.coords[0],pathPoint.coords[1]));
+            path.push(new PathPointSim(pathPoint.stationId,parseFloat(pathPoint.coords[0]),parseFloat(pathPoint.coords[1])));
+
+            console.log(path[path.length-1].latitude);
         }
         console.log(path)
         const busStations: Array<StationSim> = []
