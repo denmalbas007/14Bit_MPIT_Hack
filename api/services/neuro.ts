@@ -11,7 +11,9 @@ async function predictIntention(prompt) {
         }
     })
     console.log(answer.data);
-    return answer.data
+    return {
+        data: answer.data
+    }
 }
 async function predictPassengers(routeStationId) {
     const routeStation = await BusRouteStation.findOne({
