@@ -4,6 +4,7 @@ import {BusSim} from "./entities/BusSim";
 import {StationSim} from "./entities/StationSim";
 import { Server } from "socket.io";
 import neuro  from "../services/neuro"
+import {PathPointSim} from "./entities/PathPointSim";
 
 async function start_simulation(io: Server) {
 //    await neuro.predictPassengers(1);
@@ -40,6 +41,10 @@ async function start_simulation(io: Server) {
 
     for (const route of routes) {
         console.log(route.path);
+        const path: Array<PathPointSim> = []
+        for (const pathPoint of route.path) {
+            path.push(new PathPointSim(pathPoint.stationId,pathPoint.latitude,pathPoint.longitude));
+        }
         const busStations: Array<StationSim> = []
         for (const routeStation of route.busRouteStations) {
             const newStation = new StationSim(routeStation.busStationId,routeStation.id, routeStation.busStation.latitude,routeStation.busStation.longitude)
@@ -50,7 +55,7 @@ async function start_simulation(io: Server) {
         let i = 0;
         for (const shift of route.shifts) {
             i+=1;
-            const newBus = new BusSim(shift.busId,(i%2==0) ? 1 : 0,newRoute.stations)
+            const newBus = new BusSim(shift.busId,(i%2==0) ? 1 : 0,path)
             newRoute.buses.push(newBus);
         }
         routesSim.push(newRoute)

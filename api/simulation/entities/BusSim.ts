@@ -1,6 +1,7 @@
 import {PassengerSim} from "./PassengerSim";
 import {StationSim} from "./StationSim";
 import {Bus, BusChargeHistory} from "../../database/models";
+import {PathPointSim} from "./PathPointSim";
 
 export class BusSim {
     orientation = 0
@@ -14,7 +15,7 @@ export class BusSim {
     path_step = 0
     path_station = 0
     passengers: Array<PassengerSim> = []
-    route: Array<StationSim> = []
+    path: Array<PathPointSim> = []
     capacity = 100
     charge = 100
     is_charging = 0
@@ -22,14 +23,14 @@ export class BusSim {
     latitude = 0
     longitude = 0
 
-    constructor(busId, orientation, stations) {
+    constructor(busId, orientation, path) {
         this.busId = busId;
 
-        this.stations = stations
+        this.path = path
 
         this.orientation = orientation
         if (!orientation) {
-            this.path_station = this.stations.length - 1;
+            this.path_station = this.path.length - 1;
         }
     }
     addPassenger(passenger: PassengerSim) {
@@ -44,7 +45,7 @@ export class BusSim {
             return;
         }
         this.charge = Math.max(0,this.charge - (this.stopActiveId === -1 ? 2 : 1))
-        if (this.path_step <= 1  && (this.path_station === 0 || this.path_station === this.stations.length - 1)) {
+        if (this.path_step <= 1  && (this.path_station === 0 || this.path_station === this.path.length - 1)) {
 
             if (this.is_charging === 1) {
                 this.charge = Math.min(this.charge + 5, 100);
@@ -62,13 +63,12 @@ export class BusSim {
 
 
         if (this.path_step >= this.timeBetweenStops) {
-            this.path_step = this.timeBetweenStops
 
 
             if (this.orientation) {
-                this.stopActiveId = this.stations[this.path_station + 1].stationId
+                this.stopActiveId = this.path[this.path_station + 1].stationId
             } else {
-                this.stopActiveId = this.stations[this.path_station - 1].stationId
+                this.stopActiveId = this.path[this.path_station - 1].stationId
             }
             this.stopTimeElapsed += 1
             if (this.stopTimeElapsed <= this.timeForStop) return;
@@ -86,16 +86,16 @@ export class BusSim {
 
         const newPassengers = [];
         for (const passenger of this.passengers) {
-            if (this.stations[this.path_station].stationId !== passenger.exitStationId) {
+            if (this.path[this.path_station].stationId !== passenger.exitStationId) {
                 newPassengers.push(passenger)
             }
         }
         this.passengers = newPassengers;
 
 
-        if (this.path_station >= this.stations.length - 1 && this.orientation || this.path_station <= 0 && !this.orientation) {
+        if (this.path_station >= this.path.length - 1 && this.orientation || this.path_station <= 0 && !this.orientation) {
 
-            this.path_station = this.orientation ? this.stations.length - 1 : 0
+            this.path_station = this.orientation ? this.path.length - 1 : 0
             this.path_step = 0
             this.has_started = "waiting"
             this.orientation = (this.orientation + 1) % 2;
@@ -105,16 +105,16 @@ export class BusSim {
 
 
         if (this.orientation) {
-            const deltaLatitude = this.stations[this.path_station + 1].latitude - this.stations[this.path_station].latitude
-            const deltaLongitude = this.stations[this.path_station + 1].longitude - this.stations[this.path_station].longitude
+            const deltaLatitude = this.path[this.path_station + 1].latitude - this.path[this.path_station].latitude
+            const deltaLongitude = this.path[this.path_station + 1].longitude - this.path[this.path_station].longitude
 
-            this.latitude = this.stations[this.path_station].latitude + this.path_step/100 * deltaLatitude
-            this.longitude = this.stations[this.path_station].longitude + this.path_step/100 * deltaLongitude
+            this.latitude = this.path[this.path_station].latitude + this.path_step/100 * deltaLatitude
+            this.longitude = this.path[this.path_station].longitude + this.path_step/100 * deltaLongitude
         } else {
-            const deltaLatitude = this.stations[this.path_station].latitude - this.stations[this.path_station - 1].latitude
-            const deltaLongitude = this.stations[this.path_station].longitude - this.stations[this.path_station - 1].longitude
-            this.latitude = this.stations[this.path_station].latitude + this.path_step/100 * deltaLatitude
-            this.longitude = this.stations[this.path_station].longitude + this.path_step/100 * deltaLongitude
+            const deltaLatitude = this.path[this.path_station].latitude - this.path[this.path_station - 1].latitude
+            const deltaLongitude = this.path[this.path_station].longitude - this.path[this.path_station - 1].longitude
+            this.latitude = this.path[this.path_station].latitude + this.path_step/100 * deltaLatitude
+            this.longitude = this.path[this.path_station].longitude + this.path_step/100 * deltaLongitude
         }
 
     }
