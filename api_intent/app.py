@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 
 
-@app.route('/intention',methods=['GET'])
+@app.route('/intention',methods=['POST'])
 def intention_predict():
     print(request.json)
     prompt = request.json['prompt']
