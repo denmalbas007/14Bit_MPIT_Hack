@@ -39,6 +39,7 @@ async function start_simulation(io: Server) {
 
 
     for (const route of routes) {
+        console.log(route.path);
         const busStations: Array<StationSim> = []
         for (const routeStation of route.busRouteStations) {
             const newStation = new StationSim(routeStation.busStationId,routeStation.id, routeStation.busStation.latitude,routeStation.busStation.longitude)

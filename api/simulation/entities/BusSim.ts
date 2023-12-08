@@ -14,7 +14,7 @@ export class BusSim {
     path_step = 0
     path_station = 0
     passengers: Array<PassengerSim> = []
-    stations: Array<StationSim> = []
+    route: Array<StationSim> = []
     capacity = 100
     charge = 100
     is_charging = 0
