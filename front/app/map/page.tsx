@@ -8,13 +8,20 @@ import mapboxgl, { Map, Evented } from "mapbox-gl";
 import React, { useEffect, useRef, useState } from "react";
 import turf, { bearing, point } from "@turf/turf";
 
-import { Popup } from "@/components/popup";
+import {BusRoutePopup} from "@/components/busRoutePopup";
+import {RoutePopup} from "@/components/routePopup";
 
 export default function MapPage() {
   mapboxgl.accessToken =
     "pk.eyJ1IjoiYnlrb3YxNCIsImEiOiJjbHBzYm1kN3owMXlvMm1vOTh0M3p0MHJyIn0.gSDEL3B4-UohUBnJqsgrbA";
 
   const mapContainerRef = useRef(null as unknown as HTMLElement);
+  useEffect(()=>{
+
+    async function getRouteData() {
+
+    }
+  })
   let busStations = {
     type: "FeatureCollection",
     features: []
@@ -440,7 +447,7 @@ export default function MapPage() {
 
   return (
     <div className="w-full h-full">
-      <Popup onBackClick={()=>{console.log('what'); setClickedId(null); setClickedIdState(false)}} statusCardBody={([<img className="w-6 h-6" src="/icons/Dummy_Circle_Small.svg" />, <div>12 автобусов</div>])} hidden={!clickedIdStateD} />
+      <RoutePopup onBackClick={()=>{console.log('what'); setClickedId(null); setClickedIdState(false)}} hidden={!clickedIdStateD}></RoutePopup>
       <div ref={mapContainerRef} className="w-full h-full" />
     </div>
   );
