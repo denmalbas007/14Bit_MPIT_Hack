@@ -15,8 +15,31 @@ export default function MapPage() {
     "pk.eyJ1IjoiYnlrb3YxNCIsImEiOiJjbHBzYm1kN3owMXlvMm1vOTh0M3p0MHJyIn0.gSDEL3B4-UohUBnJqsgrbA";
 
   const mapContainerRef = useRef(null as unknown as HTMLElement);
-
-
+  let busStations = {
+    type: "FeatureCollection",
+    features: []
+  };
+  setTimeout(async()=>{
+    let busStationsBack = await ((await fetch("https://14-bit.ru/api/bus_station")).json());
+    console.log(busStationsBack);
+    busStations.features = [];
+    for (let busStation of busStationsBack.busStations) {
+      busStations.features.push({
+        type: "Feature",
+        properties: {
+          hover: false,
+          click: false,
+          id: 0,
+        },
+        geometry: {
+          type: "Point",
+          coordinates: [busStation.longitude, busStation.latitude],
+        },
+        id: 0,
+        indexInArray: busStations.features.length
+      })
+    }
+  },0);
   let buses = {
     type: "FeatureCollection",
     features: [
@@ -318,6 +341,24 @@ export default function MapPage() {
       }
 
       //bus icon
+      map.loadImage("/icons/busStation.png",(error,image) =>{
+        if (error) throw error;
+        map.addImage("busStation_image",image);
+        console.log("AAhhh",busStations)
+        map.addSource("bus_stations",{
+          type:"geojson",
+          data: busStations
+        });
+        map.addLayer({
+          id: "bus_stations",
+          type: "symbol",
+          source: "bus_stations",
+          layout: {
+            "icon-image": "busStation_image",
+            "icon-size": 1,
+          },
+        });
+      })
       map.loadImage("/icons/map/bus/bus.png", (error, image) => {
         if (error) throw error;
         map.addImage("bus_image", image);
@@ -385,10 +426,10 @@ export default function MapPage() {
       };
 
       setInterval(async () => {
-//        const b = await updateBuses();
-//        map.getSource("buses").setData(b);
-//        console.log(map.getSource("buses"));
-//        buses = b;
+        const b = await updateBuses();
+        map.getSource("buses").setData(b);
+        console.log(map.getSource("buses"));
+        buses = b;
       }, 500);
     });
 
