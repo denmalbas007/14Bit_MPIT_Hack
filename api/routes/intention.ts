@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   const options = {
-    prompt: req.params['prompt']
+    prompt: req.query['prompt']
   };
 
   try {
