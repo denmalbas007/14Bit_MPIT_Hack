@@ -31,7 +31,8 @@ async function postBus(options) {
 
 async function getBuses(options) {
   const buses = await Bus.findAll({
-    order: [["id","ASC"]]
+    order: [["id","ASC"]],
+    limit: options.limit
   })
   return {
     status: 200,

@@ -25,6 +25,7 @@ router.post('/', async (req, res, next) => {
 
 router.get('/', async (req, res, next) => {
   const options = {
+    limit: req.query['limit']
   };
 
   try {
