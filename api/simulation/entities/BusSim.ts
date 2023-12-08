@@ -70,6 +70,9 @@ export class BusSim {
             } else {
                 this.stopActiveId = this.path[this.path_station - 1].stationId
             }
+            if (this.stopActiveId === -1) {
+                this.stopTimeElapsed = this.timeForStop;
+            }
             this.stopTimeElapsed += 1
             if (this.stopTimeElapsed <= this.timeForStop) return;
 
