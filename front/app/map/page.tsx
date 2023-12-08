@@ -269,11 +269,6 @@ export default function MapPage() {
         const bus_bearing = bearing(point(start), point(end));
 
         map.getSource("buses").setData(buses);
-        // map.setLayoutProperty(
-        //   { source: "buses", id: id },
-        //   "icon-rotate",
-        //   bus_bearing - 180
-        // );
         stops[id][1] = bus_bearing - 180;
         map.setLayoutProperty("buses", "icon-rotate", {
           property: "id",
@@ -336,24 +331,22 @@ export default function MapPage() {
           return {
             type: "Feature",
             properties: {
-              hover: false,
-              click: false,
+              hover: buses?.features[parseInt(bus.id)]?.properties?.click,
+              click: buses?.features[parseInt(bus.id)]?.properties?.hover,
               id: bus.id,
             },
             geometry: {
               type: "Point",
-              coordinates: [bus.longitude, bus.latitude],
+              coordinates: [bus.latitude, bus.longitude],
             },
             id: bus.id,
           };
         });
 
-        const buses = {
+        return {
           type: "FeatureCollection",
           features: buses_features,
         };
-
-        return buses;
       };
 
       setInterval(async () => {
