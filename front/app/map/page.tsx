@@ -5,7 +5,7 @@ import { Link } from "@nextui-org/link";
 import { Tabs, Tab, Chip, Card, CardBody } from "@nextui-org/react";
 
 import mapboxgl, { Map, Evented } from "mapbox-gl";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import turf, { bearing, point } from "@turf/turf";
 
 import { Popup } from "@/components/popup";
@@ -16,9 +16,6 @@ export default function MapPage() {
 
   const mapContainerRef = useRef(null as unknown as HTMLElement);
 
-  let clickedId = null;
-
-  const [clickedIdState, setClickedIdState] = useState(false);
 
   let buses = {
     type: "FeatureCollection",
@@ -35,6 +32,7 @@ export default function MapPage() {
           coordinates: [37.636359, 55.82253000000001],
         },
         id: 0,
+        indexInArray: 0,
       },
       {
         type: "Feature",
@@ -48,19 +46,47 @@ export default function MapPage() {
           coordinates: [37.643086000000004, 55.82607500000001],
         },
         id: 1,
+        indexInArray: 1
       },
     ],
   };
+  const [map,setMap] = useState(null);
 
-  useEffect(() => {
+  let clickedId = useRef(null);
+  let setClickedId = (value) => {
+    if (value === null && clickedId.current !== null) {
+      console.log("oooh",clickedId)
+      map.getSource("buses").setData(buses);
+    }
+    clickedId.current = value;
+  }
+
+  let clickedIdState = false;
+  const [clickedIdStateD,setClickedIdStateD] = useState(false)
+
+  function setClickedIdState(value) {
+    console.log("WHY")
+    setClickedIdStateD(true)
+    setClickedIdStateD(value)
+    clickedIdState = value;
+  }
+  let haveFired = false;
+  let hoveredId = null;
+  useEffect(()=>{
     // Initialize map when component mounts
-    const map = new mapboxgl.Map({
+    setMap(new mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/dark-v11",
       center: [37.644401, 55.823165], // starting position [lng, lat]
       zoom: 15, // starting zoom
-    });
+    }));
+  },[])
+  useEffect(() => {
+    console.log("effect update");
 
+    if (map === null || haveFired) return
+
+    haveFired = true;
     map.addControl(new mapboxgl.NavigationControl(), "top-right");
 
     const route1 = [
@@ -201,25 +227,27 @@ export default function MapPage() {
       });
 
       map.on("click", "buses", (e) => {
+
         if (e.features.length > 0) {
-          if (clickedId !== null) {
-            buses.features[clickedId].properties.click = false;
+          if (clickedId.current !== null) {
+            buses.features[clickedId.current].properties.click = false;
           }
-          clickedId = e.features[0].id;
+          setClickedId(e.features[0].id);
           setClickedIdState(true);
-          buses.features[clickedId].properties.click = true;
+          buses.features[e.features[0].id].properties.click = true;
           map.getSource("buses").setData(buses);
         }
       });
 
-      let hoveredId = null;
+
 
       map.on("click", (e) => {
+        console.log("CLICKING MAP",hoveredId,clickedId.current)
         if (hoveredId === null) {
-          if (clickedId !== null) {
-            buses.features[clickedId].properties.click = false;
+          if (clickedId.current !== null) {
+            buses.features[clickedId.current].properties.click = false;
             map.getSource("buses").setData(buses);
-            clickedId = null;
+            setClickedId(null);
             setClickedIdState(false);
           }
         }
@@ -357,21 +385,20 @@ export default function MapPage() {
       };
 
       setInterval(async () => {
-        const b = await updateBuses();
-        map.getSource("buses").setData(b);
-        console.log(map.getSource("buses"));
-        buses = b;
+//        const b = await updateBuses();
+//        map.getSource("buses").setData(b);
+//        console.log(map.getSource("buses"));
+//        buses = b;
       }, 500);
     });
 
     // Clean up on unmount
     return () => map.remove();
-  }, []);
+  }, [map]);
 
   return (
     <div className="w-full h-full">
-      <Popup hidden={!clickedIdState} />
-
+      <Popup onBackClick={()=>{console.log('what'); setClickedId(null); setClickedIdState(false)}} statusCardBody={([<img className="w-6 h-6" src="/icons/Dummy_Circle_Small.svg" />, <div>12 автобусов</div>])} hidden={!clickedIdStateD} />
       <div ref={mapContainerRef} className="w-full h-full" />
     </div>
   );
