@@ -400,6 +400,7 @@ export default function MapPage() {
         const buses_back = await (
           await fetch("https://14-bit.ru/api/bus")
         ).json();
+        console.log(buses_back)
 
         const buses_features = buses_back.buses.map((bus) => {
           return {
@@ -411,7 +412,7 @@ export default function MapPage() {
             },
             geometry: {
               type: "Point",
-              coordinates: [bus.longitude, bus.latitude],
+              coordinates: [bus.latitude, bus.longitude],
             },
             id: bus.id,
           };
