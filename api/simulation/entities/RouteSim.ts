@@ -107,7 +107,6 @@ export class RouteSim {
                         if (!this._willBusGoThroughStation(this.stations[i].stationId,passenger.exitStationId,this.buses[j].orientation)) return true
                         this.buses[j].passengers.push(passenger);
 
-                        console.log("passenger in ",this.stations[i].stationId, "wanting to go to", passenger.exitStationId,"goes to bus  ",this.buses[j].busId, " with orientation ",this.buses[j].orientation )
                         return false;
                     })
                 }

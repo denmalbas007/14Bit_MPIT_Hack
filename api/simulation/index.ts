@@ -64,7 +64,6 @@ async function start_simulation(io: Server) {
     }
 
     setInterval(async ()=>{
-        console.log("simulation update")
         for (let i = 0; i < routesSim.length; ++i) {
             await routesSim[i].update()
         }
