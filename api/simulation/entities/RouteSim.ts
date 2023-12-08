@@ -26,7 +26,11 @@ export class RouteSim {
                 maxRestBusIndex = i
             }
         }
-        this.buses[maxRestBusIndex].startShift()
+        try {
+            this.buses[maxRestBusIndex].startShift()
+        } catch (e) {
+
+        }
 
     }
     startBus() {
