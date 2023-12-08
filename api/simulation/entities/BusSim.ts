@@ -133,9 +133,9 @@ export class BusSim {
         busObject.levelOfCharge = this.charge;
         await busObject.save()
 
-        await BusChargeHistory.create({
-            busId: this.busId,
-            charge: this.charge
-        });
+        // await BusChargeHistory.create({
+        //     busId: this.busId,
+        //     charge: this.charge
+        // });
     }
 }
