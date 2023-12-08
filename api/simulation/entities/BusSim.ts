@@ -111,13 +111,13 @@ export class BusSim {
             const deltaLatitude = this.path[this.path_station + 1].latitude - this.path[this.path_station].latitude
             const deltaLongitude = this.path[this.path_station + 1].longitude - this.path[this.path_station].longitude
 
-            this.latitude = this.path[this.path_station].latitude + this.path_step/this.timeBetweenStops * deltaLatitude
-            this.longitude = this.path[this.path_station].longitude + this.path_step/this.timeBetweenStops * deltaLongitude
+            this.latitude = this.path[this.path_station].latitude + this.path_step/(this.timeBetweenStops+2) * deltaLatitude
+            this.longitude = this.path[this.path_station].longitude + this.path_step/(this.timeBetweenStops+2) * deltaLongitude
         } else {
             const deltaLatitude = this.path[this.path_station - 1].latitude - this.path[this.path_station].latitude
             const deltaLongitude = this.path[this.path_station - 1].longitude - this.path[this.path_station].longitude
-            this.latitude = this.path[this.path_station].latitude + this.path_step/this.timeBetweenStops * deltaLatitude
-            this.longitude = this.path[this.path_station].longitude + this.path_step/this.timeBetweenStops * deltaLongitude
+            this.latitude = this.path[this.path_station].latitude + this.path_step/(this.timeBetweenStops+2) * deltaLatitude
+            this.longitude = this.path[this.path_station].longitude + this.path_step/(this.timeBetweenStops+2) * deltaLongitude
         }
 
     }
